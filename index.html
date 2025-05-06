@@ -394,8 +394,8 @@
         // Function to load a specific lecture
         function loadLecture(lecture) {
             // Update iframe source
-            // Use youtube-nocookie.com for privacy enhancement
-            const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${lecture.vid}?autoplay=1&rel=0&modestbranding=1`;
+            // Use youtube-nocookie.com for privacy enhancement and remove autoplay
+            const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${lecture.vid}?rel=0&modestbranding=1`; // Removed autoplay=1
             youtubeIframe.src = youtubeEmbedUrl;
 
             // Update PDF link visibility and href
@@ -418,7 +418,7 @@
             if (activeItem) {
                 activeItem.classList.add('active');
                 // Optional: Scroll the list to bring the active item into view
-                activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                // Removed: activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
 
             // Sync heights after loading new video (optional, flexbox helps)
