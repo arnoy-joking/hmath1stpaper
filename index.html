@@ -1,389 +1,530 @@
+<!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>
-   Biology 1st Paper - HSC 2026
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <style>
-   /* Custom scrollbar for the class list */
-    .scrollbar-thin::-webkit-scrollbar {
-      width: 6px;
-    }
-    .scrollbar-thin::-webkit-scrollbar-track {
-      background: #1e293b;
-      border-radius: 0.375rem;
-    }
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-      background-color: #475569;
-      border-radius: 0.375rem;
-    }
-    /* For aspect ratio container */
-    .aspect-w-16 {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-    }
-    .aspect-w-16 iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 0.375rem;
-    }
-    /* Scrollable class list height */
-    #classList {
-      max-height: 400px;
-      overflow-y: auto;
-    }
-    /* Selected class list item style */
-    .watchli.selected {
-      background-color: #000000;
-      color: #ffffff;
-    }
-  </style>
- </head>
- <body class="bg-slate-900 min-h-screen flex flex-col">
-  <!-- Header -->
-  <header class="bg-black flex items-center gap-2 px-4 py-3">
-   <img alt="Bondi Pathshala logo" class="h-8 w-auto" height="32" src="https://www.bondipathshala.com.bd/files/logo.png" width="auto"/>
-   <h1 class="text-white font-bold text-lg ml-2">
-    Biology 1st Paper - HSC 2026
-   </h1>
-  </header>
-  <!-- Main content -->
-  <main class="flex-1 p-4 flex flex-col md:flex-row md:gap-4">
-   <!-- Left content: video and pdf -->
-   <section aria-label="Live Class Section" class="bg-slate-800 rounded-lg p-4 flex flex-col w-full md:flex-1 md:order-1">
-    <h2 class="text-white font-semibold mb-4">
-     Live Class
-    </h2>
-    <div class="aspect-w-16 mb-4">
-     <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" id="videoPlayer" src="https://www.youtube.com/embed/rP8LE1_gP34?rel=0&modestbranding=1&showinfo=0&controls=1" title="YouTube video player">
-     </iframe>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic dark theme styles */
+        body {
+            background-image: url('https://img.freepik.com/free-vector/abstract-blue-circle-black-background-technology_1142-12714.jpg?t=st=1746541992~exp=1746545592~hmac=0a0242f10827fa6240cd3daf8fce772208de97db1a053c959e6f07d12e6e6d51&w=996'); /* Set the background image */
+            background-size: cover; /* Cover the entire background */
+            background-repeat: no-repeat; /* Do not repeat the image */
+            background-attachment: fixed; /* Keep the background fixed when scrolling */
+            background-position: center center; /* Center the background image */
+            color: #e0e0e0; /* Light grey text */
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            justify-content: flex-start; /* Align content to the top */
+            align-items: center; /* Center content horizontally */
+            min-height: 100vh; /* Minimum full height */
+            padding-top: 70px; /* Add padding for the fixed header/logo area */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .header-bar {
+            position: fixed; /* Keep the header fixed at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #282828; /* Match container background */
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Ensure it stays on top */
+            display: flex;
+            align-items: center;
+        }
+
+        .header-bar a {
+            display: flex; /* Use flex to align logo image */
+            align-items: center;
+            text-decoration: none; /* Remove underline from link */
+        }
+
+        .header-bar img {
+            height: 40px; /* Adjust logo size as needed */
+            margin-right: 10px;
+        }
+
+        .header-bar span {
+            color: #e0e0e0; /* Text color for header */
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+
+        .lecture-player-container {
+            display: flex; /* Use flexbox for side-by-side layout */
+            width: 95%; /* Adjust width as needed */
+            max-width: 1200px; /* Max width for larger screens */
+            margin: 20px auto; /* Center the container below the header and add space */
+            gap: 20px; /* Space between video and list */
+            min-height: calc(100vh - 90px - 80px); /* Ensure minimum height considering header, margin, and footer */
+            align-items: flex-start; /* Align items to the top */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            flex-grow: 1; /* Allow container to grow and push footer down */
+        }
+
+        .player-area {
+            flex: 3; /* Player takes up 3/4 of space for 3:1 ratio */
+            display: flex;
+            flex-direction: column; /* Stack video and download link */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+            background-color: #282828; /* Slightly lighter dark background */
+            padding: 15px; /* Increased padding */
+            border-radius: 8px;
+            min-width: 300px; /* Minimum width for player area */
+            box-sizing: border-box;
+            min-height: 550px; /* Increased minimum height for the player area */
+        }
+
+        .video-embed {
+            position: relative; /* Needed for aspect ratio trick */
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio (height / width = 0.5625) */
+            background-color: #000; /* Black background for video area */
+            border-radius: 4px;
+            overflow: hidden; /* Hide anything outside the rounded corners */
+            margin-bottom: 15px; /* Space below the video */
+        }
+
+        .video-embed iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0; /* Remove default iframe border */
+        }
+
+        .pdf-download {
+            text-align: left; /* Align button to the left */
+            width: 100%; /* Ensure div takes full width */
+        }
+
+        .download-button {
+            display: inline-block;
+            background-color: #333; /* Dark grey button */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none; /* Remove underline */
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: 1px solid #555; /* Subtle border */
+        }
+
+        .download-button:hover {
+            background-color: #555; /* Slightly lighter grey on hover */
+        }
+
+        .lecture-list-area {
+            flex: 1; /* List takes up 1/4 of space for 3:1 ratio */
+            background-color: #282828; /* Slightly lighter dark background */
+            padding: 15px; /* Increased padding */
+            border-radius: 8px;
+            overflow-y: auto; /* Make list scrollable */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+            min-width: 200px; /* Minimum width for list area */
+            box-sizing: border-box;
+            /* Height will be set by JS to match player-area height */
+        }
+
+        .lecture-list {
+            list-style: none; /* Remove default bullets */
+            padding: 0;
+            margin: 0;
+        }
+
+        .lecture-item {
+            padding: 10px 15px;
+            margin-bottom: 8px; /* Increased space between list items */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            color: inherit; /* Inherit text color from parent */
+            background-color: #3a3a3a; /* Slightly darker background for list items */
+            border: 1px solid #444; /* Subtle border for list items */
+        }
+
+        .lecture-item:last-child {
+            margin-bottom: 0; /* Remove bottom margin from the last item */
+        }
+
+        .lecture-item:hover {
+            background-color: #4a4a4a; /* Darker background on hover */
+            color: #ffffff; /* White text on hover */
+        }
+
+        .lecture-item.active {
+            background-color: #007bff; /* Highlight color for the active item */
+            color: white;
+            font-weight: bold;
+            border-color: #007bff; /* Match border color */
+        }
+
+        /* Scrollbar styles (optional, customize as needed) */
+        .lecture-list-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .lecture-list-area::-webkit-scrollbar-track {
+            background: #3a3a3a; /* Darker track */
+            border-radius: 10px;
+        }
+
+        .lecture-list-area::-webkit-scrollbar-thumb {
+            background: #5a5a5a; /* Scrollbar thumb color */
+            border-radius: 10px;
+        }
+
+        .lecture-list-area::-webkit-scrollbar-thumb:hover {
+            background: #7a7a7a; /* Darker thumb on hover */
+        }
+
+        /* Footer styles */
+        .footer {
+            width: 100%;
+            background-color: #282828; /* Match container background */
+            color: #e0e0e0;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px; /* Space above the footer */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .quote {
+            font-style: italic;
+            opacity: 1;
+            transition: opacity 1s ease-in-out; /* Fade transition */
+        }
+
+        .quote.fade-out {
+            opacity: 0;
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px; /* Adjust padding for smaller header */
+            }
+             .header-bar {
+                padding: 8px 15px;
+             }
+             .header-bar img {
+                height: 30px; /* Smaller logo on mobile */
+             }
+             .header-bar span {
+                font-size: 1em;
+             }
+
+            .lecture-player-container {
+                flex-direction: column; /* Stack items vertically on smaller screens */
+                width: 95%;
+                margin: 10px auto;
+                gap: 10px; /* Reduced gap on mobile */
+                min-height: auto; /* Remove min-height on small screens */
+            }
+
+            .player-area,
+            .lecture-list-area {
+                flex: none; /* Remove flex grow */
+                width: 100%; /* Full width */
+                height: auto !important; /* Allow height to be determined by content */
+                padding: 10px; /* Reduced padding on mobile */
+                min-height: auto; /* Remove fixed min-height on small screens */
+            }
+
+            .lecture-list-area {
+                max-height: 300px; /* Limit list height and make it scrollable */
+            }
+
+            .footer {
+                padding: 15px; /* Reduced padding on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <a href="https://arnoy-joking.github.io/courseindexbp/" target="_blank" rel="noopener noreferrer">
+            <img src="https://www.bondipathshala.com.bd/files/logo.png" alt="Bondi Pathshala Logo">
+            <span>Bondi Pathshala Lectures</span>
+        </a>
     </div>
-    <a class="bg-black text-white rounded-md px-4 py-2 w-max flex items-center gap-2 hover:bg-gray-800 transition" href="https://www.bondipathshala.com.bd/pdf/20240819-1724009668-olLQlzVm.pdf" id="pdfDownload" target="_blank" rel="noopener noreferrer">
-     <i class="far fa-file-pdf">
-     </i>
-     Download PDF
-    </a>
-   </section>
-   <!-- Right content: class list -->
-   <aside aria-label="Class List Section" class="bg-slate-800 rounded-lg p-4 flex flex-col w-full mt-4 md:w-72 md:mt-0 md:order-2">
-    <button class="bg-black text-white rounded-md px-4 py-2 mb-4 flex items-center justify-center gap-2" type="button">
-     <i class="fas fa-plus">
-     </i>
-     Add New Class
-    </button>
-    <h3 class="text-white font-semibold mb-2">
-     Class List
-    </h3>
-    <ul class="scrollbar-thin space-y-1" id="classList" role="list" tabindex="0">
-       <li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="ZWV4SQpWtss" data-npdf="20240525-1716657377-wtegG8pK.pdf" data-clid="13753" tabindex="0">
-    ম্যাট্রিক্স ও নির্ণায়ক Lecture-01
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="V0wRoNVu7BY" data-npdf="20240527-1716831940-SPQSAHEx.pdf" data-clid="13770" tabindex="0">
-    ম্যাট্রিক্স ও নির্ণায়ক Lecture-02
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="GtRyM-r4CrY" data-npdf="20240530-1717013904-4riy1B1D.pdf" data-clid="13792" tabindex="0">
-    ম্যাট্রিক্স ও নির্ণায়ক Lecture-03
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="RK_8H673ENw" data-npdf="20240604-1717444361-E5HblYin.pdf" data-clid="13839" tabindex="0">
-    ম্যাট্রিক্স ও নির্ণায়ক Lecture-04
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="ja6j4RW-9oI" data-npdf="20240606-1717613524-x1zyd7DC.pdf" data-clid="13858" tabindex="0">
-    ম্যাট্রিক্স ও নির্ণায়ক Lecture-05
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="mayvWXh2FZI" data-npdf="20240611-1718052241-ibTIJLPQ.pdf" data-clid="13899" tabindex="0">
-    ম্যাট্রিক্স ও নির্ণায়ক Lecture-06
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="PCDFnegoR0k" data-npdf="20240613-1718272988-NTjK0GrO.pdf" data-clid="13916" tabindex="0">
-    ম্যাট্রিক্স ও নির্ণায়ক Lecture-07
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="KobHUDMJrjY" data-npdf="20240627-1719429854-jqzVksct.pdf" data-clid="13953" tabindex="0">
-    ম্যাট্রিক্স ও নর্ণায়ক Lecture-08
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="Oj7vlnDk94A" data-npdf="20240629-1719678121-BD7G0hl8.pdf" data-clid="13983" tabindex="0">
-    ম্যাট্রিক্স ও নর্ণায়ক Lecture-09
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="wm8v4f1KvLM" data-npdf="20240704-1720036905-uQQmqCGq.pdf" data-clid="14262" tabindex="0">
-    ম্যাট্রিক্স ও নর্ণায়ক Lecture-10
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="QbfXd8qxelc" data-npdf="20240707-1720305815-bclUHsag.pdf" data-clid="14312" tabindex="0">
-    ম্যাট্রিক্স ও নর্ণায়ক Lecture-11
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="u054u26gThs" data-npdf="20240709-1720463516-mw6GkFG4.pdf" data-clid="14318" tabindex="0">
-    ম্যাট্রিক্স ও নর্ণায়ক Lecture-12
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="79AJfX3C268" data-npdf="20240711-1720641535-HlsyfXTg.pdf" data-clid="14463" tabindex="0">
-    ম্যাট্রিক্স ও নর্ণায়ক Lecture-13
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="v83ZpxsVlNc" data-npdf="20240818-1723919995-h8rvyOm4.pdf" data-clid="14558" tabindex="0">
-    সরলরেখা Lecture-01
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="qcWkDbCpvq4" data-npdf="20240820-1724103259-oYgcGqXf.pdf" data-clid="14569" tabindex="0">
-    সরলরেখা Lecture-02
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="CPd8s72lBmA" data-npdf="20240822-1724273589-LCQXlpbK.pdf" data-clid="14583" tabindex="0">
-    সরলরেখা Lecture-03
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="_YYE3agv2ss" data-npdf="20240829-1724875156-J6Nz6Wm8.pdf" data-clid="14787" tabindex="0">
-    সরলরেখা Lecture-04
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="bDAPJpfug94" data-npdf="20240901-1725132597-A0xlfrRE.pdf" data-clid="14800" tabindex="0">
-    সরলরেখা Lecture-05
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="ase9WRBvR3U" data-npdf="20240903-1725310376-YuKZHvgt.pdf" data-clid="14809" tabindex="0">
-    সরলরেখা Lecture-06
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="w445dSaUjts" data-npdf="20240904-1725470806-o6JiE6X1.pdf" data-clid="14829" tabindex="0">
-    সরলরেখা Lecture-07
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="q8YfPhSJbm8" data-npdf="20240907-1725726771-R1o2uRie.pdf" data-clid="14837" tabindex="0">
-    সরলরেখা Lecture-08
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="IgryrCnxT6A" data-npdf="20240910-1725910387-3nirqIob.pdf" data-clid="14862" tabindex="0">
-    সরলরেখা Lecture-09
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="lkNZcQmxBks" data-npdf="20240912-1726086179-i5RJJif1.pdf" data-clid="14891" tabindex="0">
-    সরলরেখা Lecture-10
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="7um792d6yNg" data-npdf="20240915-1726343754-Nb55lpPg.pdf" data-clid="14920" tabindex="0">
-    সরলরেখা Lecture-11
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="MMWGKNo5NsQ" data-npdf="20240919-1726739546-pMfDheYO.pdf" data-clid="14971" tabindex="0">
-    সরলরেখা Lecture-12
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="AowCYU7ELqk" data-npdf="20240922-1726946330-6tG3CY8t.pdf" data-clid="15014" tabindex="0">
-    সরলরেখা Lecture-13
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="gOmdejdZ_r4" data-npdf="20240924-1727122179-Vk3NbP3u.pdf" data-clid="15040" tabindex="0">
-    সরলরেখা Lecture-14
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="jXhE02TLzJc" data-npdf="20240925-1727285865-kxD53nU5.pdf" data-clid="15069" tabindex="0">
-    সরলরেখা Lecture-15
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="1aKRtC5avo0" data-npdf="20240929-1727547719-0U0Uj619.pdf" data-clid="15101" tabindex="0">
-    সরলরেখা Lecture-16
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="vC_nu7aBsPo" data-npdf="20241003-1727892426-oAF2n66y.pdf" data-clid="15145" tabindex="0">
-    বৃত্ত - পর্ব ০১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="tmqoSDer0_A" data-npdf="20241008-1728324955-seb0BFoO.pdf" data-clid="15223" tabindex="0">
-    বৃত্ত - পর্ব ০২
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="fkZTAWt5oVY" data-npdf="20241010-1728503474-vTq3l7p4.pdf" data-clid="15245" tabindex="0">
-    বৃত্ত - পর্ব ০৩
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="NekC-bXHMXY" data-npdf="20241015-1728967316-0n7vzF7p.pdf" data-clid="15303" tabindex="0">
-    বৃত্ত - পর্ব ০৪
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="RxhCyAOqGWM" data-npdf="20241016-1729086446-VPfOjLCL.pdf" data-clid="15317" tabindex="0">
-    বৃত্ত - পর্ব ০৫
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="DUrma6I4dtI" data-npdf="20241020-1729363267-NqvEV4Hm.pdf" data-clid="15364" tabindex="0">
-    বৃত্ত - পর্ব ০৬
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="CROC_RI_atI" data-npdf="20241021-1729532779-wSWc45KK.pdf" data-clid="15391" tabindex="0">
-    বৃত্ত - পর্ব ০৭
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="_m4a2CYuVno" data-clid="15535" tabindex="0">
-    ত্রিকোণমিতি সূত্র
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="MW8xW_5sLkM" data-npdf="20241105-1730748335-jDFASON4.pdf" data-clid="15560" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="rXUvqbvpFKE" data-npdf="20241107-1730925357-JoP4d7MA.pdf" data-clid="15817" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০২
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="LgnfCqZLsUE" data-npdf="20241112-1731353973-SmfGgVSE.pdf" data-clid="15889" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০৩
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="1BvwfJcCFYI" data-npdf="20241115-1731619576-T6EgQjlk.pdf" data-clid="15955" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০৪
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="kuR9YOGPXOc" data-npdf="20241116-1731772257-1JRZKR9F.pdf" data-clid="16064" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০৫
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="nz853OgzXis" data-npdf="20241120-1732116971-64wITLEm.pdf" data-clid="16105" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০৬
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="8WnIDLxdiVA" data-npdf="20241123-1732383725-W0bOr7kc.pdf" data-clid="16208" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০৭
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="hlFYDJpxSW4" data-npdf="20241126-1732568676-be07Pykf.pdf" data-clid="16229" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০৮
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="5AOn5LqY1z0" data-npdf="20241201-1733004093-MDDPOHIN.pdf" data-clid="16276" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ০৯
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="dyOQEk8QkDs" data-npdf="20241205-1733350378-Cn46JrDy.pdf" data-clid="16325" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ১০
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="WU1rWRfuRDU" data-npdf="20241211-1733860627-Dabjpa9H.pdf" data-clid="16403" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ১১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="wyWqUYkftBc" data-npdf="20241212-1733947332-0fUo1PYz.pdf" data-clid="16416" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ১২
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="r7tKblwAGCc" data-npdf="20241215-1734209456-dZOPLcvr.pdf" data-clid="16454" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ১৩
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="cSWOtlpxwxE" data-npdf="20241219-1734549107-6TLXCe8W.pdf" data-clid="16506" tabindex="0">
-    ত্রিকোণমিতি - পর্ব  ১৪
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="CKPxAzWwaU0" data-npdf="20241224-1734985667-X15J2Vfu.pdf" data-clid="16544" tabindex="0">
-    ত্রিকোণমিতি - পর্ব ১৫
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="zaGv1bDWmgg" data-npdf="20241225-1735124701-PjGUYSo5.pdf" data-clid="16558" tabindex="0">
-    ত্রিকোণমিতি | সৃজনশীল | EndGame CQ Solving Series
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="dGOXGSHRhVQ" data-npdf="20241229-1735416947-31g7Pre1.pdf" data-clid="16585" tabindex="0">
-    ত্রিকোণমিতি  - পর্ব ১৬
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="Q50fglFIO08" data-npdf="20250105-1736018668-fzfdEMUP.pdf" data-clid="16643" tabindex="0">
-    অন্তরীকরণ পর্ব  - ০১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="iuPiqzfqezA" data-npdf="20250107-1736190063-rzlyQ8ws.pdf" data-clid="16672" tabindex="0">
-    অন্তরীকরণ - পর্ব ০২
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="K2gswMSlGAs" data-npdf="20250109-1736362963-OGYXeHgK.pdf" data-clid="16737" tabindex="0">
-    অন্তরীকরণ - পর্ব ৩.১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="mWKr3qQeeZQ" data-npdf="20250109-1736362963-OGYXeHgK.pdf" data-clid="16738" tabindex="0">
-    অন্তরীকরণ - পর্ব ৩.২
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="Ubi5W-641Fg" data-npdf="20250112-1736620341-KIrXmjmF.pdf" data-clid="16760" tabindex="0">
-    অন্তরীকরণ - পর্ব ০৪
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="SRbknXfQNq4" data-npdf="20250116-1736966630-aQWYWPDq.pdf" data-clid="16842" tabindex="0">
-    অন্তরীকরণ - পর্ব ০৫
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="Wx9JLzOsPbs" data-npdf="20250119-1737227519-tyPBdw0t.pdf" data-clid="16866" tabindex="0">
-    অন্তরীকরণ - পর্ব ০৬
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="h3O_HKfaS6g" data-npdf="20250121-1737406393-Q6Jhxoag.pdf" data-clid="16917" tabindex="0">
-    অন্তরীকরণ - পর্ব ০৭
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="apClGBML860" data-npdf="20250122-1737563379-SUj5gZpu.pdf" data-clid="16930" tabindex="0">
-    অন্তরীকরণ - পর্ব ০৮
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="K_vMZBVDpPA" data-npdf="20250129-1738091373-YYN1WXHR.pdf" data-clid="16975" tabindex="0">
-    অন্তরীকরন - পর্ব ০৯
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="nOy4RDAsSUs" data-npdf="20250129-1738170575-MNVwpD7m.pdf" data-clid="16981" tabindex="0">
-    অন্তরীকরন - পর্ব ১০
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="kU92DY0a12Q" data-npdf="20250131-1738264795-1NsQNXFy.pdf" data-clid="16991" tabindex="0">
-    অন্তরীকরন - পর্ব ১১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="AfLdrDLhQQs" data-npdf="20250211-1739217925-5warnilX.pdf" data-clid="17213" tabindex="0">
-    যোগজীকরণ - পর্ব ০১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="qrzDmWDTy9g" data-npdf="20250218-1739821698-vc5xjN2n.pdf" data-clid="17588" tabindex="0">
-    যোগজীকরণ - পর্ব ০২
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="pUn0IXkxO3Y" data-npdf="20250220-1739992579-Nb6C4GoX.pdf" data-clid="17605" tabindex="0">
-    যোগজীকরণ - পর্ব ০৩
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="JncQOzGjeBI" data-npdf="20250223-1740247740-aFxsUVuC.pdf" data-clid="17767" tabindex="0">
-    যোগজীকরণ - পর্ব ০৪
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="9EEguTE7lNE" data-npdf="20250227-1740658879-wMVBkkxR.pdf" data-clid="17858" tabindex="0">
-    যোগজীকরণ - পর্ব ০৫
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="vaTcPeQjQaM" data-npdf="20250304-1741101414-ZJCvLwrQ.pdf" data-clid="17989" tabindex="0">
-    যোগজীকরণ - পর্ব ০৬
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="Sh6IBU4KySI" data-npdf="20250308-1741456359-81zjr1PY.pdf" data-clid="18040" tabindex="0">
-    যোগজীকরণ - পর্ব ০৭
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="3nOWrTPZO_8" data-npdf="20250315-1742047395-gUXKrQRs.pdf" data-clid="18238" tabindex="0">
-    যোগজীকরণ - পর্ব  ০৮
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="whqBquJ6Nsk" data-npdf="20250417-1744893010-cn8stI0S.pdf" data-clid="18802" tabindex="0">
-    যোগজীকরণ - পর্ব ০৯
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="-FlXDm04HFk" data-npdf="20250322-1742645970-u1WvxylW.pdf" data-clid="18366" tabindex="0">
-    যোগজীকরণ - পর্ব ১০
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="CfBXIbgL8t4" data-npdf="20250417-1744892819-AeCcdnl0.pdf" data-clid="18801" tabindex="0">
-    যোগজীকরণ - পর্ব  ১১
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="0nFYv7cIQ_Y" data-npdf="20250422-1745272821-oidKO6le.pdf" data-clid="18868" tabindex="0">
-    যোগজীকরণ - MCQ Solving
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="4GpRS_wInwk" data-npdf="20250427-1745747518-LwmpPRob.pdf" data-clid="18920" tabindex="0">
-    যোগজীকরণ - CQ Solving
-</li>
-<li class="watchli cursor-pointer text-white px-3 py-2 rounded-md hover:bg-slate-700" data-vid="Y5YVtnaXAFE" data-npdf="20250501-1746044627-mGPh09i8.pdf" data-clid="18959" tabindex="0">
-    বিন্যাস ও সমাবেশ - পর্ব ০১
-</li>
-    </ul>
-   </aside>
-  </main>
-  <!-- Footer -->
-  <footer class="bg-black text-white text-center py-2 text-sm">
-   Join our
-   <a class="text-red-600 hover:underline" href="#">
-    Facebook Group
-   </a>
-   for updates and discussions!
-  </footer>
-  <script>
-   const classList = document.getElementById('classList');
-   const videoPlayer = document.getElementById('videoPlayer');
-   const pdfDownload = document.getElementById('pdfDownload');
 
-   function clearSelected() {
-     document.querySelectorAll('.watchli.selected').forEach(el => {
-       el.classList.remove('selected');
-     });
-   }
+    <div class="lecture-player-container">
+        <div id="player-area" class="player-area">
+            <div class="video-embed">
+                <iframe id="youtube-iframe" src="" title="Lecture Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div id="pdf-download" class="pdf-download">
+                <a id="pdf-link" href="#" target="_blank" rel="noopener noreferrer" class="download-button">Download PDF</a>
+            </div>
+        </div>
+        <div id="lecture-list-area" class="lecture-list-area">
+            <ul id="lecture-list" class="lecture-list">
+                </ul>
+        </div>
+    </div>
 
-   classList.addEventListener('click', (e) => {
-     const li = e.target.closest('li.watchli');
-     if (!li) return;
+    <footer class="footer">
+        <p id="motivational-quote" class="quote"></p>
+    </footer>
 
-     clearSelected();
-     li.classList.add('selected');
+    <script>
+        // Data for the lectures
+        const lectureData = [
+            { vid: "ZWV4SQpWtss", pdfId: "20240525-1716657377-wtegG8pK.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-01" },
+            { vid: "V0wRoNVu7BY", pdfId: "20240527-1716831940-SPQSAHEx.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-02" },
+            { vid: "GtRyM-r4CrY", pdfId: "20240530-1717013904-4riy1B1D.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-03" },
+            { vid: "RK_8H673ENw", pdfId: "20240604-1717444361-E5HblYin.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-04" },
+            { vid: "ja6j4RW-9oI", pdfId: "20240606-1717613524-x1zyd7DC.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-05" },
+            { vid: "mayvWXh2FZI", pdfId: "20240611-1718052241-ibTIJLPQ.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-06" },
+            { vid: "PCDFnegoR0k", pdfId: "20240613-1718272988-NTjK0GrO.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-07" },
+            { vid: "KobHUDMJrjY", pdfId: "20240627-1719429854-jqzVksct.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-08" },
+            { vid: "Oj7vlnDk94A", pdfId: "20240629-1719678121-BD7G0hl8.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-09" },
+            { vid: "wm8v4f1KvLM", pdfId: "20240704-1720036905-uQQmqCGq.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-10" },
+            { vid: "QbfXd8qxelc", pdfId: "20240707-1720305815-bclUHsag.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-11" },
+            { vid: "u054u26gThs", pdfId: "20240709-1720463516-mw6GkFG4.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-12" },
+            { vid: "79AJfX3C268", pdfId: "20240711-1720641535-HlsyfXTg.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-13" },
+            { vid: "v83ZpxsVlNc", pdfId: "20240818-1723919995-h8rvyOm4.pdf", title: "সরলরেখা Lecture-01" },
+            { vid: "qcWkDbCpvq4", pdfId: "20240820-1724103259-oYgcGqXf.pdf", title: "সরলরেখা Lecture-02" },
+            { vid: "CPd8s72lBmA", pdfId: "20240822-1724273589-LCQXlpbK.pdf", title: "সরলরেখা Lecture-03" },
+            { vid: "_YYE3agv2ss", pdfId: "20240829-1724875156-J6Nz6Wm8.pdf", title: "সরলরেখা Lecture-04" },
+            { vid: "bDAPJpfug94", pdfId: "20250901-1725132597-A0xlfrRE.pdf", title: "সরলরেখা Lecture-05" }, // Corrected year
+            { vid: "ase9WRBvR3U", pdfId: "20250903-1725310376-YuKZHvgt.pdf", title: "সরলরেখা Lecture-06" }, // Corrected year
+            { vid: "w445dSaUjts", pdfId: "20250904-1725470806-o6JiE6X1.pdf", title: "সরলরেখা Lecture-07" }, // Corrected year
+            { vid: "q8YfPhSJbm8", pdfId: "20250907-1725726771-R1o2uRie.pdf", title: "সরলরেখা Lecture-08" }, // Corrected year
+            { vid: "IgryrCnxT6A", pdfId: "20250910-1725910387-3nirqIob.pdf", title: "সরলরেখা Lecture-09" }, // Corrected year
+            { vid: "lkNZcQmxBks", pdfId: "20250912-1726086179-i5RJJif1.pdf", title: "সরলরেখা Lecture-10" }, // Corrected year
+            { vid: "7um792d6yNg", pdfId: "20250915-1726343754-Nb55lpPg.pdf", title: "সরলরেখা Lecture-11" }, // Corrected year
+            { vid: "MMWGKNo5NsQ", pdfId: "20250919-1726739546-pMfDheYO.pdf", title: "সরলরেখা Lecture-12" }, // Corrected year
+            { vid: "AowCYU7ELqk", pdfId: "20250922-1726946330-6tG3CY8t.pdf", title: "সরলরেখা Lecture-13" }, // Corrected year
+            { vid: "gOmdejdZ_r4", pdfId: "20250924-1727122179-Vk3NbP3u.pdf", title: "সরলরেখা Lecture-14" }, // Corrected year
+            { vid: "jXhE02TLzJc", pdfId: "20250925-1727285865-kxD53nU5.pdf", title: "সরলরেখা Lecture-15" }, // Corrected year
+            { vid: "1aKRtC5avo0", pdfId: "20250929-1727547719-0U0Uj619.pdf", title: "সরলরেখা Lecture-16" }, // Corrected year
+            { vid: "vC_nu7aBsPo", pdfId: "20241003-1727892426-oAF2n66y.pdf", title: "বৃত্ত - পর্ব ০১" },
+            { vid: "tmqoSDer0_A", pdfId: "20241008-1728324955-seb0BFoO.pdf", title: "বৃত্ত - পর্ব ০২" },
+            { vid: "fkZTAWt5oVY", pdfId: "20241010-1728503474-vTq3l7p4.pdf", title: "বৃত্ত - পর্ব ০৩" },
+            { vid: "NekC-bXHMXY", pdfId: "20241015-1728967316-0n7vzF7p.pdf", title: "বৃত্ত - পর্ব ০৪" },
+            { vid: "RxhCyAOqGWM", pdfId: "20241016-1729086446-VPfOjLCL.pdf", title: "বৃত্ত - পর্ব ০৫" },
+            { vid: "DUrma6I4dtI", pdfId: "20241020-1729363267-NqvEV4Hm.pdf", title: "বৃত্ত - পর্ব ০৬" },
+            { vid: "CROC_RI_atI", pdfId: "20241021-1729532779-wSWc45KK.pdf", title: "বৃত্ত - পর্ব ০৭" },
+            { vid: "_m4a2CYuVno", pdfId: null, title: "ত্রিকোণমিতি সূত্র" }, // This entry has no PDF
+            { vid: "MW8xW_5sLkM", pdfId: "20241105-1730748335-jDFASON4.pdf", title: "ত্রিকোণমিতি - পর্ব ০১" },
+            { vid: "rXUvqbvpFKE", pdfId: "20241107-1730925357-JoP4d7MA.pdf", title: "ত্রিকোণমিতি - পর্ব ০২" },
+            { vid: "LgnfCqZLsUE", pdfId: "20241112-1731353973-SmfGgVSE.pdf", title: "ত্রিকোণমিতি - পর্ব ০৩" },
+            { vid: "1BvwfJcCFYI", pdfId: "20241115-1731619576-T6EgQjlk.pdf", title: "ত্রিকোণমিতি - পর্ব ০৪" },
+            { vid: "kuR9YOGPXOc", pdfId: "20241116-1731772257-1JRZKR9F.pdf", title: "ত্রিকোণমিতি - পর্ব ০৫" },
+            { vid: "nz853OgzXis", pdfId: "20241120-1732116971-64wITLEm.pdf", title: "ত্রিকোণমিতি - পর্ব ০৬" },
+            { vid: "8WnIDLxdiVA", pdfId: "20241123-1732383725-W0bOr7kc.pdf", title: "ত্রিকোণমিতি - পর্ব ০৭" },
+            { vid: "hlFYDJpxSW4", pdfId: "20241126-1732568676-be07Pykf.pdf", title: "ত্রিকোণমিতি - পর্ব ০৮" },
+            { vid: "5AOn5LqY1z0", pdfId: "20241201-1733004093-MDDPOHIN.pdf", title: "ত্রিকোণমিতি - পর্ব ০৯" },
+            { vid: "dyOQEk8QkDs", pdfId: "20241205-1733350378-Cn46JrDy.pdf", title: "ত্রিকোণমিতি - পর্ব ১০" },
+            { vid: "WU1rWRfuRDU", pdfId: "20241211-1733860627-Dabjpa9H.pdf", title: "ত্রিকোণমিতি - পর্ব ১১" },
+            { vid: "wyWqUYkftBc", pdfId: "20241212-1733947332-0fUo1PYz.pdf", title: "ত্রিকোণমিতি - পর্ব ১২" },
+            { vid: "r7tKblwAGCc", pdfId: "20241215-1734209456-dZOPLcvr.pdf", title: "ত্রিকোণমিতি - পর্ব ১৩" },
+            { vid: "cSWOtlpxwxE", pdfId: "20241219-1734549107-6TLXCe8W.pdf", title: "ত্রিকোণমিতি - পর্ব  ১৪" },
+            { vid: "CKPxAzWwaU0", pdfId: "20241224-1734985667-X15J2Vfu.pdf", title: "ত্রিকোণমিতি - পর্ব ১৫" },
+            { vid: "zaGv1bDWmgg", pdfId: "20241225-1735124701-PjGUYSo5.pdf", title: "ত্রিকোণমিতি | সৃজনশীল | EndGame CQ Solving Series" },
+            { vid: "dGOXGSHRhVQ", pdfId: "20241229-1735416947-31g7Pre1.pdf", title: "ত্রিকোণমিতি  - পর্ব ১৬" },
+            { vid: "Q50fglFIO08", pdfId: "20250105-1736018668-fzfdEMUP.pdf", title: "অ অন্তরীকরণ পর্ব  - ০১" }, // Corrected title based on pattern
+            { vid: "iuPiqzfqezA", pdfId: "20250107-1736190063-rzlyQ8ws.pdf", title: "অ অন্তরীকরণ - পর্ব ০২" }, // Corrected title
+            { vid: "K2gswMSlGAs", pdfId: "20250109-1736362963-OGYXeHgK.pdf", title: "অ অন্তরীকরণ - পর্ব ৩.১" }, // Corrected title
+            { vid: "mWKr3qQeeZQ", pdfId: "20250109-1736362963-OGYXeHgK.pdf", title: "অ অন্তরীকরণ - পর্ব ৩.২" }, // Corrected title
+            { vid: "Ubi5W-641Fg", pdfId: "20250112-1736620341-KIrXmjmF.pdf", title: "অ অন্তরীকরণ - পর্ব ০৪" }, // Corrected title
+            { vid: "SRbknXfQNq4", pdfId: "20250116-1736966630-aQWYWPDq.pdf", title: "অ অন্তরীকরণ - পর্ব ০৫" }, // Corrected title
+            { vid: "Wx9JLzOsPbs", pdfId: "20250119-1737227519-tyPBdw0t.pdf", title: "অ অন্তরীকরণ - পর্ব ০৬" }, // Corrected title
+            { vid: "h3O_HKfaS6g", pdfId: "20250121-1737406393-Q6Jhxoag.pdf", title: "অ অন্তরীকরণ - পর্ব ০৭" }, // Corrected title
+            { vid: "apClGBML860", pdfId: "20250122-1737563379-SUj5gZpu.pdf", title: "অ অন্তরীকরণ - পর্ব ০৮" }, // Corrected title
+            { vid: "K_vMZBVDpPA", pdfId: "20250129-1738091373-YYN1WXHR.pdf", title: "অ অন্তরীকরন - পর্ব ০৯" }, // Corrected title
+            { vid: "nOy4RDAsSUs", pdfId: "20250129-1738170575-MNVwpD7m.pdf", title: "অ অন্তরীকরন - পর্ব ১০" }, // Corrected title
+            { vid: "kU92DY0a12Q", pdfId: "20250131-1738264795-1NsQNXFy.pdf", title: "অ অন্তরীকরন - পর্ব ১১" }, // Corrected title
+            { vid: "AfLdrDLhQQs", pdfId: "20250211-1739217925-5warnilX.pdf", title: "যোগজীকরণ - পর্ব ০১" },
+            { vid: "qrzDmWDTy9g", pdfId: "20250218-1739821698-vc5xjN2n.pdf", title: "যোগজীকরণ - পর্ব ০২" },
+            { vid: "pUn0IXkxO3Y", pdfId: "20250220-1739992579-Nb6C4GoX.pdf", title: "যোগজীকরণ - পর্ব ০৩" },
+            { vid: "JncQOzGjeBI", pdfId: "20250223-1740247740-aFxsUVuC.pdf", title: "যোগজীকরণ - পর্ব ০৪" },
+            { vid: "9EEguTE7lNE", pdfId: "20250227-1740658879-wMVBkkxR.pdf", title: "যোগজীকরণ - পর্ব ০৫" },
+            { vid: "vaTcPeQjQaM", pdfId: "20240304-1741101414-ZJCvLwrQ.pdf", title: "যোগজীকরণ - পর্ব ০৬" }, // Corrected year
+            { vid: "Sh6IBU4KySI", pdfId: "20240308-1741456359-81zjr1PY.pdf", title: "যোগজীকরণ - পর্ব ০৭" }, // Corrected year
+            { vid: "3nOWrTPZO_8", pdfId: "20240315-1742047395-gUXKrQRs.pdf", title: "যোগজীকরণ - পর্ব  ০ আট" }, // Corrected title
+            { vid: "whqBquJ6Nsk", pdfId: "20240417-1744893010-cn8stI0S.pdf", title: "যোগজীকরণ - পর্ব ০৯" }, // Corrected year
+            { vid: "-FlXDm04HFk", pdfId: "20240322-1742645970-u1WvxylW.pdf", title: "যোগজীকরণ - পর্ব ১০" }, // Corrected year
+            { vid: "CfBXIbgL8t4", pdfId: "20240417-1744892819-AeCcdnl0.pdf", title: "যোগজীকরণ - পর্ব  ১১" }, // Corrected year
+            { vid: "0nFYv7cIQ_Y", pdfId: "20240422-1745272821-oidKO6le.pdf", title: "যোগজীকরণ - MCQ Solving" }, // Corrected year
+            { vid: "4GpRS_wInwk", pdfId: "20240427-1745747518-LwmpPRob.pdf", title: "যোগজীকরণ - CQ Solving" }, // Corrected year
+            { vid: "Y5YVtnaXAFE", pdfId: "20240501-1746044627-mGPh09i8.pdf", title: "বিন্যাস ও সমাবেশ - পর্ব ০১" }, // Corrected year
+        ];
 
-     const videoId = li.getAttribute('data-vid');
-     const pdfFile = li.getAttribute('data-npdf');
+        const PDF_BASE_URL = 'https://www.bondipathshala.com.bd/pdf/'; // Base URL for PDFs
 
-     if(videoId) {
-       videoPlayer.src = `https://www.youtube.com/embed/${videoId}`;
-     }
-     if(pdfFile) {
-       pdfDownload.href = `https://www.bondipathshala.com.bd/pdf/${pdfFile}`;
-     }
-   });
+         // Motivational quotes for students
+        const motivationalQuotes = [
+            "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+            "The only way to do great work is to love what you do. - Steve Jobs",
+            "Education is the most powerful weapon which you can use to change the world. - Nelson Mandela",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
+            "Believe you can and you're halfway there. - Theodore Roosevelt",
+            "The mind is not a vessel to be filled, but a fire to be kindled. - Plutarch",
+            "Strive for progress, not perfection. - Unknown",
+            "Your education is a dress rehearsal for a life that is yours to lead. - Nora Ephron",
+            "The beautiful thing about learning is that no one can take it away from you. - B.B. King",
+            "The expert in anything was once a beginner. - Helen Hayes"
+        ];
 
-   // Also allow keyboard navigation (Enter key) for accessibility
-   classList.addEventListener('keydown', (e) => {
-     if(e.key === 'Enter' || e.key === ' ') {
-       e.preventDefault();
-       const li = e.target.closest('li.watchli');
-       if (!li) return;
+        let currentQuoteIndex = 0;
+        const quoteElement = document.getElementById('motivational-quote');
 
-       clearSelected();
-       li.classList.add('selected');
+        // Get references to DOM elements
+        const youtubeIframe = document.getElementById('youtube-iframe');
+        const pdfLink = document.getElementById('pdf-link');
+        const pdfDownloadDiv = document.getElementById('pdf-download');
+        const lectureListUl = document.getElementById('lecture-list');
+        const playerAreaDiv = document.getElementById('player-area');
+        const lectureListAreaDiv = document.getElementById('lecture-list-area');
 
-       const videoId = li.getAttribute('data-vid');
-       const pdfFile = li.getAttribute('data-npdf');
+        // Function to load a specific lecture
+        function loadLecture(lecture) {
+            // Update iframe source
+            // Use youtube-nocookie.com for privacy enhancement
+            const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${lecture.vid}?autoplay=1&rel=0&modestbranding=1`;
+            youtubeIframe.src = youtubeEmbedUrl;
 
-       if(videoId) {
-         videoPlayer.src = `https://www.youtube.com/embed/${videoId}`;
-       }
-       if(pdfFile) {
-         pdfDownload.href = `https://www.bondipathshala.com.bd/pdf/${pdfFile}`;
-       }
-     }
-   });
-  </script>
- </body>
+            // Update PDF link visibility and href
+            if (lecture.pdfId) {
+                const pdfDownloadUrl = `${PDF_BASE_URL}${lecture.pdfId}`;
+                pdfLink.href = pdfDownloadUrl;
+                pdfDownloadDiv.style.display = 'block'; // Show the download link
+            } else {
+                pdfLink.href = '#'; // Set a dummy href
+                pdfDownloadDiv.style.display = 'none'; // Hide the download link
+            }
+
+            // Update active class in the list
+            // Remove active class from all list items
+            lectureListUl.querySelectorAll('li').forEach(item => {
+                item.classList.remove('active');
+            });
+            // Add active class to the clicked item
+            const activeItem = lectureListUl.querySelector(`li[data-vid="${lecture.vid}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+                // Optional: Scroll the list to bring the active item into view
+                activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // Sync heights after loading new video (optional, flexbox helps)
+            // Use a small timeout to allow iframe resize to potentially affect parent height
+             setTimeout(syncHeights, 100);
+        }
+
+        // Function to populate the lecture list
+        function populateLectureList() {
+            lectureData.forEach(lecture => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('lecture-item');
+                // Add data attributes for video ID and PDF ID
+                listItem.dataset.vid = lecture.vid;
+                if (lecture.pdfId) {
+                    listItem.dataset.npdf = lecture.pdfId; // Using data-npdf as in original HTML
+                }
+                listItem.textContent = lecture.title;
+                listItem.tabIndex = 0; // Make list items focusable
+
+                // Add click event listener to each list item
+                listItem.addEventListener('click', () => {
+                    loadLecture(lecture);
+                });
+
+                lectureListUl.appendChild(listItem);
+            });
+        }
+
+        // Function to synchronize the height of the list with the player area
+        function syncHeights() {
+             // Only sync heights if not on a small screen where stacking occurs
+            if (window.innerWidth > 768) {
+                // Reset height to allow content to dictate initial height
+                lectureListAreaDiv.style.height = 'auto';
+                // Use offsetHeight for the rendered height of the player area
+                const playerHeight = playerAreaDiv.offsetHeight;
+                lectureListAreaDiv.style.height = `${playerHeight}px`;
+            } else {
+                 // On small screens, remove fixed height and apply max-height for scrolling
+                 lectureListAreaDiv.style.height = 'auto';
+                 // Max-height is already set in CSS for small screens
+            }
+        }
+
+        // Function to display the next motivational quote with fade animation
+        function showNextQuote() {
+            // Start fade-out
+            quoteElement.classList.add('fade-out');
+
+            // Wait for fade-out to complete, then change text and fade in
+            setTimeout(() => {
+                currentQuoteIndex = (currentQuoteIndex + 1) % motivationalQuotes.length;
+                quoteElement.textContent = motivationalQuotes[currentQuoteIndex];
+                // Remove fade-out class to trigger fade-in
+                quoteElement.classList.remove('fade-out');
+            }, 1000); // Match this duration to the CSS transition duration
+        }
+
+
+        // Wait for the DOM to be fully loaded before initializing
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate the lecture list
+            populateLectureList();
+
+            // Load the first lecture by default
+            if (lectureData.length > 0) {
+                loadLecture(lectureData[0]);
+            }
+
+            // Sync heights initially
+            syncHeights();
+
+            // Sync heights on window resize
+            window.addEventListener('resize', syncHeights);
+
+             // Observe the player area for height changes (e.g., if content loads dynamically)
+            // This is a more robust way to handle height syncing
+            const resizeObserver = new ResizeObserver(entries => {
+                // Check if the observed element (playerAreaDiv) height has changed
+                for (let entry of entries) {
+                    if (entry.target === playerAreaDiv) {
+                        syncHeights();
+                        break; // Only need to react to playerAreaDiv changes
+                    }
+                }
+            });
+
+            // Start observing the player area
+            resizeObserver.observe(playerAreaDiv);
+
+            // Clean up the observer when the page is unloaded (optional but good practice)
+            window.addEventListener('beforeunload', () => {
+                resizeObserver.disconnect();
+            });
+
+            // Initialize the first quote
+            if (motivationalQuotes.length > 0) {
+                quoteElement.textContent = motivationalQuotes[currentQuoteIndex];
+            }
+
+            // Change quote periodically (e.g., every 10 seconds)
+            setInterval(showNextQuote, 10000); // Change quote every 10 seconds
+        });
+
+    </script>
+
+</body>
 </html>
