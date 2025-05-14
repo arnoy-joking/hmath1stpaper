@@ -3,528 +3,1689 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lecture Player</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Higher Math 1st Paper</title>
     <style>
-        /* Basic dark theme styles */
+        /* Import fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* CSS Variables */
+        :root {
+          --background: #121212;
+          --foreground: #f5f5f5;
+          --muted: #282828;
+          --muted-foreground: #a3a3a3;
+          --card: #1e1e1e;
+          --card-foreground: #f5f5f5;
+          --border: #303030;
+          --input: #303030;
+          --primary: #9333ea;
+          --primary-foreground: #ffffff;
+          --secondary: #10b981;
+          --secondary-foreground: #ffffff;
+          --accent: #f59e0b;
+          --accent-foreground: #1f2937;
+          --destructive: #ef4444;
+          --radius: 0.5rem;
+        }
+
+        /* Base Styles */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
         body {
-            background-image: url('https://img.freepik.com/free-vector/abstract-blue-circle-black-background-technology_1142-12714.jpg?t=st=1746541992~exp=1746545592~hmac=0a0242f10827fa6240cd3daf8fce772208de97db1a053c959e6f07d12e6e6d51&w=996'); /* Set the background image */
-            background-size: cover; /* Cover the entire background */
-            background-repeat: no-repeat; /* Do not repeat the image */
-            background-attachment: fixed; /* Keep the background fixed when scrolling */
-            background-position: center center; /* Center the background image */
-            color: #e0e0e0; /* Light grey text */
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column; /* Stack content vertically */
-            justify-content: flex-start; /* Align content to the top */
-            align-items: center; /* Center content horizontally */
-            min-height: 100vh; /* Minimum full height */
-            padding-top: 70px; /* Add padding for the fixed header/logo area */
-            box-sizing: border-box; /* Include padding in element's total width and height */
+          font-family: 'Inter', sans-serif;
+          background-color: var(--background);
+          color: var(--foreground);
+          line-height: 1.5;
+          background-image: url('https://img.freepik.com/free-vector/abstract-blue-circle-black-background-technology_1142-12714.jpg?w=996');
+          background-size: cover;
+          background-attachment: fixed;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
         }
 
-        .header-bar {
-            position: fixed; /* Keep the header fixed at the top */
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #282828; /* Match container background */
-            padding: 10px 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1000; /* Ensure it stays on top */
-            display: flex;
-            align-items: center;
+        h1, h2, h3, h4, h5, h6 {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 600;
         }
 
-        .header-bar a {
-            display: flex; /* Use flex to align logo image */
-            align-items: center;
-            text-decoration: none; /* Remove underline from link */
+        .container {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1rem;
         }
 
-        .header-bar img {
-            height: 40px; /* Adjust logo size as needed */
-            margin-right: 10px;
+        .hidden {
+          display: none !important;
         }
 
-        .header-bar span {
-            color: #e0e0e0; /* Text color for header */
-            font-size: 1.2em;
-            font-weight: bold;
+        .highlight {
+          color: var(--accent);
         }
 
-
-        .lecture-player-container {
-            display: flex; /* Use flexbox for side-by-side layout */
-            width: 95%; /* Adjust width as needed */
-            max-width: 1200px; /* Max width for larger screens */
-            margin: 20px auto; /* Center the container below the header and add space */
-            gap: 20px; /* Space between video and list */
-            min-height: calc(100vh - 90px - 80px); /* Ensure minimum height considering header, margin, and footer */
-            align-items: flex-start; /* Align items to the top */
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            flex-grow: 1; /* Allow container to grow and push footer down */
+        /* Header */
+        .site-header {
+          background: linear-gradient(to right, var(--background), rgba(147, 51, 234, 0.8));
+          border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+          position: sticky;
+          top: 0;
+          z-index: 50;
         }
 
-        .player-area {
-            flex: 3; /* Player takes up 3/4 of space for 3:1 ratio */
-            display: flex;
-            flex-direction: column; /* Stack video and download link */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
-            background-color: #282828; /* Slightly lighter dark background */
-            padding: 15px; /* Increased padding */
-            border-radius: 8px;
-            min-width: 300px; /* Minimum width for player area */
-            box-sizing: border-box;
-            min-height: 550px; /* Increased minimum height for the player area */
+        .site-header .container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.75rem 1rem;
         }
 
-        .video-embed {
-            position: relative; /* Needed for aspect ratio trick */
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio (height / width = 0.5625) */
-            background-color: #000; /* Black background for video area */
-            border-radius: 4px;
-            overflow: hidden; /* Hide anything outside the rounded corners */
-            margin-bottom: 15px; /* Space below the video */
+        .logo-area {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
         }
 
-        .video-embed iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0; /* Remove default iframe border */
+        .logo {
+          height: 2.5rem;
         }
 
-        .pdf-download {
-            text-align: left; /* Align button to the left */
-            width: 100%; /* Ensure div takes full width */
+        .site-title {
+          font-size: 1.25rem;
+          font-weight: 700;
         }
 
-        .download-button {
-            display: inline-block;
-            background-color: #333; /* Dark grey button */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none; /* Remove underline */
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            border: 1px solid #555; /* Subtle border */
+        .user-area {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
         }
 
-        .download-button:hover {
-            background-color: #555; /* Slightly lighter grey on hover */
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
         }
 
-        .lecture-list-area {
-            flex: 1; /* List takes up 1/4 of space for 3:1 ratio */
-            background-color: #282828; /* Slightly lighter dark background */
-            padding: 15px; /* Increased padding */
-            border-radius: 8px;
-            overflow-y: auto; /* Make list scrollable */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
-            min-width: 200px; /* Minimum width for list area */
-            box-sizing: border-box;
-            /* Height will be set by JS to match player-area height */
+        .logout-btn {
+          background-color: var(--primary);
+          color: var(--primary-foreground);
+          border: none;
+          border-radius: var(--radius);
+          padding: 0.375rem 0.75rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          font-family: inherit;
+          font-size: 0.875rem;
         }
 
-        .lecture-list {
-            list-style: none; /* Remove default bullets */
-            padding: 0;
-            margin: 0;
+        .logout-btn:hover {
+          background-color: rgba(147, 51, 234, 0.8);
         }
 
-        .lecture-item {
-            padding: 10px 15px;
-            margin-bottom: 8px; /* Increased space between list items */
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
-            color: inherit; /* Inherit text color from parent */
-            background-color: #3a3a3a; /* Slightly darker background for list items */
-            border: 1px solid #444; /* Subtle border for list items */
+        /* Main Content */
+        .main-content {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          padding: 1rem;
+          flex-grow: 1;
         }
 
-        .lecture-item:last-child {
-            margin-bottom: 0; /* Remove bottom margin from the last item */
+        /* Video Container */
+        .video-container {
+          width: 100%;
         }
 
-        .lecture-item:hover {
-            background-color: #4a4a4a; /* Darker background on hover */
-            color: #ffffff; /* White text on hover */
+        .video-card {
+          background-color: var(--card);
+          border-radius: var(--radius);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          border: 1px solid rgba(147, 51, 234, 0.2);
         }
 
-        .lecture-item.active {
-            background-color: #007bff; /* Highlight color for the active item */
-            color: white;
-            font-weight: bold;
-            border-color: #007bff; /* Match border color */
+        .video-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          border-bottom: 1px solid var(--border);
         }
 
-        /* Scrollbar styles (optional, customize as needed) */
-        .lecture-list-area::-webkit-scrollbar {
-            width: 8px;
+        .video-title {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 1.125rem;
+          color: var(--foreground);
         }
 
-        .lecture-list-area::-webkit-scrollbar-track {
-            background: #3a3a3a; /* Darker track */
-            border-radius: 10px;
+        .video-title i {
+          color: var(--accent);
         }
 
-        .lecture-list-area::-webkit-scrollbar-thumb {
-            background: #5a5a5a; /* Scrollbar thumb color */
-            border-radius: 10px;
+        .video-meta {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
 
-        .lecture-list-area::-webkit-scrollbar-thumb:hover {
-            background: #7a7a7a; /* Darker thumb on hover */
+        .label {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          border-radius: var(--radius);
         }
 
-        /* Footer styles */
-        .footer {
-            width: 100%;
-            background-color: #282828; /* Match container background */
-            color: #e0e0e0;
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px; /* Space above the footer */
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-            box-sizing: border-box;
+        .label.live {
+          background-color: var(--primary);
+          color: var(--primary-foreground);
         }
 
-        .quote {
-            font-style: italic;
-            opacity: 1;
-            transition: opacity 1s ease-in-out; /* Fade transition */
+        .label.duration {
+          background-color: var(--muted);
+          color: var(--muted-foreground);
         }
 
-        .quote.fade-out {
+        .video-player-container {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 16/9;
+          background-color: #000;
+        }
+
+        .video-thumbnail {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+        }
+
+        .thumbnail-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.7;
+        }
+
+        .play-button-overlay {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .play-button {
+          width: 5rem;
+          height: 5rem;
+          border-radius: 50%;
+          background-color: rgba(245, 158, 11, 0.9);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+          transition: background-color 0.2s;
+        }
+
+        .play-button i {
+          font-size: 2.5rem;
+          color: white;
+          margin-left: 0.5rem; /* Center the play icon */
+        }
+
+        .play-button:hover {
+          background-color: var(--accent);
+        }
+
+        .click-to-play {
+          position: absolute;
+          bottom: 1rem;
+          left: 0;
+          right: 0;
+          background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+          color: white;
+          font-weight: 500;
+          padding: 1rem;
+        }
+
+        .youtube-embed {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .youtube-embed iframe {
+          width: 100%;
+          height: 100%;
+          border: 0;
+        }
+
+        .video-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          padding: 1rem;
+          background: linear-gradient(to bottom, var(--muted), var(--card));
+        }
+
+        .action-btn {
+          flex: 1;
+          min-width: 140px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.625rem 1rem;
+          border-radius: var(--radius);
+          border: none;
+          font-family: inherit;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:hover {
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn i {
+          margin-right: 0.5rem;
+        }
+
+        .download-btn {
+          background-color: var(--secondary);
+          color: var(--secondary-foreground);
+        }
+
+        .download-btn:hover {
+          background-color: rgba(16, 185, 129, 0.8);
+        }
+
+        .youtube-btn {
+          background-color: var(--accent);
+          color: var(--accent-foreground);
+        }
+
+        .youtube-btn:hover {
+          background-color: rgba(245, 158, 11, 0.8);
+        }
+
+        /* Class List */
+        .class-list-container {
+          width: 100%;
+        }
+
+        .class-list-card {
+          background-color: var(--card);
+          border-radius: var(--radius);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          border: 1px solid rgba(147, 51, 234, 0.2);
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .class-list-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem 0.75rem;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .list-title {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 1rem;
+          color: var(--foreground);
+        }
+
+        .list-title i {
+          color: var(--accent);
+        }
+
+        .list-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .icon-btn {
+          background-color: var(--muted);
+          color: var(--muted-foreground);
+          border: none;
+          border-radius: var(--radius);
+          width: 2rem;
+          height: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.75rem;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .icon-btn:hover {
+          background-color: rgba(147, 51, 234, 0.3);
+        }
+
+        .category-filters {
+          padding: 0.5rem 0.75rem;
+          background-color: var(--muted);
+          border-bottom: 1px solid var(--border);
+        }
+
+        .filter-scroll {
+          display: flex;
+          gap: 0.5rem;
+          overflow-x: auto;
+          padding-bottom: 0.25rem;
+        }
+
+        .filter-scroll::-webkit-scrollbar {
+          height: 4px;
+        }
+
+        .filter-scroll::-webkit-scrollbar-track {
+          background: var(--muted);
+          border-radius: 2px;
+        }
+
+        .filter-scroll::-webkit-scrollbar-thumb {
+          background: var(--primary);
+          border-radius: 2px;
+        }
+
+        .category-btn {
+          background-color: var(--card);
+          color: var(--muted-foreground);
+          border: none;
+          border-radius: 9999px;
+          padding: 0.25rem 0.75rem;
+          font-size: 0.75rem;
+          white-space: nowrap;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .category-btn:hover {
+          background-color: var(--muted);
+        }
+
+        .category-btn.active {
+          background-color: var(--primary);
+          color: var(--primary-foreground);
+        }
+
+        .class-items {
+          list-style: none;
+          overflow-y: auto;
+          max-height: 500px;
+          flex-grow: 1;
+        }
+
+        .class-items::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        .class-items::-webkit-scrollbar-track {
+          background: var(--muted);
+          border-radius: 2px;
+        }
+
+        .class-items::-webkit-scrollbar-thumb {
+          background: var(--primary);
+          border-radius: 2px;
+        }
+
+        .class-item {
+          padding: 0.5rem 0.75rem;
+          border-bottom: 1px solid rgba(147, 51, 234, 0.1);
+          cursor: pointer;
+          position: relative;
+          transition: all 0.2s;
+        }
+
+        .class-item:hover {
+          background-color: rgba(147, 51, 234, 0.1);
+        }
+
+        .class-item.selected {
+          background-color: rgba(147, 51, 234, 0.2);
+          border-left: 4px solid var(--primary);
+        }
+
+        .selected-indicator {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 2px;
+          background-color: var(--accent);
+        }
+
+        .class-item-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+        }
+
+        .class-info {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        .class-icon {
+          position: relative;
+          margin-top: 0.125rem;
+        }
+
+        .class-icon i {
+          font-size: 1.125rem;
+          color: var(--muted-foreground);
+        }
+
+        .selected .class-icon i {
+          color: var(--accent);
+        }
+
+        .playing-indicator {
+          position: absolute;
+          top: -0.25rem;
+          right: -0.25rem;
+          width: 0.75rem;
+          height: 0.75rem;
+        }
+
+        .playing-indicator-ping {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: var(--accent);
+          opacity: 0.75;
+          animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        .playing-indicator-dot {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: var(--accent);
+        }
+
+        @keyframes ping {
+          75%, 100% {
+            transform: scale(2);
             opacity: 0;
+          }
         }
 
+        .class-details {
+          flex-grow: 1;
+          min-width: 0; /* Ensure text truncation works */
+        }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 60px; /* Adjust padding for smaller header */
-            }
-             .header-bar {
-                padding: 8px 15px;
-             }
-             .header-bar img {
-                height: 30px; /* Smaller logo on mobile */
-             }
-             .header-bar span {
-                font-size: 1em;
-             }
+        .class-title {
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
-            .lecture-player-container {
-                flex-direction: column; /* Stack items vertically on smaller screens */
-                width: 95%;
-                margin: 10px auto;
-                gap: 10px; /* Reduced gap on mobile */
-                min-height: auto; /* Remove min-height on small screens */
-            }
+        .selected .class-title {
+          color: white;
+        }
 
-            .player-area,
-            .lecture-list-area {
-                flex: none; /* Remove flex grow */
-                width: 100%; /* Full width */
-                height: auto !important; /* Allow height to be determined by content */
-                padding: 10px; /* Reduced padding on mobile */
-                min-height: auto; /* Remove fixed min-height on small screens */
-            }
+        .class-meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          font-size: 0.75rem;
+          color: var(--muted-foreground);
+        }
 
-            .lecture-list-area {
-                max-height: 300px; /* Limit list height and make it scrollable */
-            }
+        .class-meta-item {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
 
-            .footer {
-                padding: 15px; /* Reduced padding on mobile */
-            }
+        .now-playing {
+          color: var(--accent);
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .now-playing i {
+          font-size: 0.625rem;
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.5;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+
+        .class-pdf-link {
+          color: var(--secondary);
+          text-decoration: none;
+          font-size: 0.75rem;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          transition: color 0.2s;
+        }
+
+        .class-pdf-link:hover {
+          color: rgba(16, 185, 129, 0.8);
+        }
+
+        /* Footer */
+        .site-footer {
+          background-color: var(--background);
+          border-top: 1px solid var(--border);
+          margin-top: 2rem;
+        }
+
+        .footer-content {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          gap: 2rem;
+          padding: 1.5rem 0;
+        }
+
+        .footer-logo {
+          flex: 1;
+          min-width: 200px;
+        }
+
+        .footer-logo img {
+          height: 2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .footer-logo p {
+          font-size: 0.875rem;
+          color: var(--muted-foreground);
+        }
+
+        .footer-quote {
+          flex: 2;
+          min-width: 300px;
+          font-size: 0.875rem;
+          color: var(--muted-foreground);
+        }
+
+        .quote-author {
+          text-align: right;
+          font-size: 0.75rem;
+          margin-top: 0.25rem;
+        }
+
+        .footer-social {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .social-link {
+          color: var(--muted-foreground);
+          transition: color 0.2s;
+        }
+
+        .social-link:hover {
+          color: var(--accent);
+        }
+
+        .footer-copyright {
+          text-align: center;
+          padding: 1.5rem 0;
+          border-top: 1px solid var(--border);
+          font-size: 0.75rem;
+          color: var(--muted-foreground);
+        }
+
+        /* Responsive Styles */
+        @media (min-width: 768px) {
+          .main-content {
+            flex-direction: row;
+          }
+
+          .video-container {
+            width: 60%;
+          }
+
+          .class-list-container {
+            width: 40%;
+          }
+
+          .logout-btn span {
+            display: inline;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .logout-btn span {
+            display: none;
+          }
+
+          .user-info span {
+            display: none;
+          }
+
+          .footer-content {
+            flex-direction: column;
+            gap: 1.5rem;
+          }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta name="description" content="Online learning platform for Chemistry 1st Paper - HSC 2026 with video lessons and downloadable materials">
 </head>
 <body>
-
-    <div class="header-bar">
-        <a href="https://arnoy-joking.github.io/courseindexbp/" target="_blank" rel="noopener noreferrer">
-            <img src="https://www.bondipathshala.com.bd/files/logo.png" alt="Bondi Pathshala Logo">
-            <span>Bondi Pathshala Lectures</span>
-        </a>
-    </div>
-
-    <div class="lecture-player-container">
-        <div id="player-area" class="player-area">
-            <div class="video-embed">
-                <iframe id="youtube-iframe" src="" title="Lecture Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <header class="site-header">
+        <div class="container">
+            <div class="logo-area">
+                <img src="https://bondipathshala.com.bd/files/logo.png" alt="Bondi Pathshala Logo" class="logo">
+                <h1 class="site-title"><span class="highlight">Chemistry</span> 1st Paper - HSC 2026</h1>
             </div>
-            <div id="pdf-download" class="pdf-download">
-                <a id="pdf-link" href="#" target="_blank" rel="noopener noreferrer" class="download-button">Download PDF</a>
+            <div class="user-area">
+                <div class="user-info">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Student</span>
+                </div>
+                <button class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
             </div>
         </div>
-        <div id="lecture-list-area" class="lecture-list-area">
-            <ul id="lecture-list" class="lecture-list">
-                </ul>
-        </div>
-    </div>
+    </header>
 
-    <footer class="footer">
-        <p id="motivational-quote" class="quote"></p>
+    <main class="container main-content">
+        <div class="video-container">
+            <div class="video-card">
+                <div class="video-header">
+                    <h2 class="video-title">
+                        <i class="fas fa-play-circle"></i>
+                        <span id="current-video-title">Loading...</span>
+                    </h2>
+                    <div class="video-meta">
+                        <span class="label live">LIVE</span>
+                        <span class="label duration" id="current-video-duration">00:00</span>
+                    </div>
+                </div>
+
+                <div class="video-player-container">
+                    <div id="video-thumbnail-container" class="video-thumbnail">
+                        <img id="video-thumbnail" src="" alt="Video thumbnail" class="thumbnail-img">
+                        <div class="play-button-overlay">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <p class="click-to-play">Click to play video</p>
+                        </div>
+                    </div>
+
+                    <div id="youtube-embed-container" class="youtube-embed hidden">
+                        <iframe id="youtube-iframe"
+                            frameborder="0"
+                            allowfullscreen
+                            loading="lazy"
+                            title="Class video">
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="video-actions">
+                    <button id="download-pdf-btn" class="action-btn download-btn">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Download PDF</span>
+                    </button>
+                    <button id="open-youtube-btn" class="action-btn youtube-btn">
+                        <i class="fab fa-youtube"></i>
+                        <span>Open on YouTube</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="class-list-container">
+            <div class="class-list-card">
+                <div class="class-list-header">
+                    <h2 class="list-title">
+                        <i class="fas fa-list-ul"></i>
+                        Class List
+                    </h2>
+                    <div class="list-actions">
+                        <button class="icon-btn filter-btn">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                        <button class="icon-btn search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="category-filters">
+                    <div class="filter-scroll">
+                        </div>
+                </div>
+
+                <ul id="class-list" class="class-items">
+                    </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="https://bondipathshala.com.bd/files/logo.png" alt="Bondi Pathshala Logo" class="logo">
+                    <p>Empowering students with quality education since 2015</p>
+                </div>
+                <div class="footer-quote">
+                    <p>"The scientist is not a person who gives the right answers, but one who asks the right questions."</p>
+                    <p class="quote-author">- Claude Lévi-Strauss</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; <span id="current-year"></span> Bondi Pathshala. All rights reserved.
+            </div>
+        </div>
     </footer>
 
     <script>
-        // Data for the lectures
-        const lectureData = [
-            { vid: "ZWV4SQpWtss", pdfId: "20240525-1716657377-wtegG8pK.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-01" },
-            { vid: "V0wRoNVu7BY", pdfId: "20240527-1716831940-SPQSAHEx.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-02" },
-            { vid: "GtRyM-r4CrY", pdfId: "20240530-1717013904-4riy1B1D.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-03" },
-            { vid: "RK_8H673ENw", pdfId: "20240604-1717444361-E5HblYin.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-04" },
-            { vid: "ja6j4RW-9oI", pdfId: "20240606-1717613524-x1zyd7DC.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-05" },
-            { vid: "mayvWXh2FZI", pdfId: "20240611-1718052241-ibTIJLPQ.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-06" },
-            { vid: "PCDFnegoR0k", pdfId: "20240613-1718272988-NTjK0GrO.pdf", title: "ম্যাট্রিক্স ও নির্ণায়ক Lecture-07" },
-            { vid: "KobHUDMJrjY", pdfId: "20240627-1719429854-jqzVksct.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-08" },
-            { vid: "Oj7vlnDk94A", pdfId: "20240629-1719678121-BD7G0hl8.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-09" },
-            { vid: "wm8v4f1KvLM", pdfId: "20240704-1720036905-uQQmqCGq.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-10" },
-            { vid: "QbfXd8qxelc", pdfId: "20240707-1720305815-bclUHsag.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-11" },
-            { vid: "u054u26gThs", pdfId: "20240709-1720463516-mw6GkFG4.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-12" },
-            { vid: "79AJfX3C268", pdfId: "20240711-1720641535-HlsyfXTg.pdf", title: "ম্যাট্রিক্স ও নর্ণায়ক Lecture-13" },
-            { vid: "v83ZpxsVlNc", pdfId: "20240818-1723919995-h8rvyOm4.pdf", title: "সরলরেখা Lecture-01" },
-            { vid: "qcWkDbCpvq4", pdfId: "20240820-1724103259-oYgcGqXf.pdf", title: "সরলরেখা Lecture-02" },
-            { vid: "CPd8s72lBmA", pdfId: "20240822-1724273589-LCQXlpbK.pdf", title: "সরলরেখা Lecture-03" },
-            { vid: "_YYE3agv2ss", pdfId: "20240829-1724875156-J6Nz6Wm8.pdf", title: "সরলরেখা Lecture-04" },
-            { vid: "bDAPJpfug94", pdfId: "20250901-1725132597-A0xlfrRE.pdf", title: "সরলরেখা Lecture-05" }, // Corrected year
-            { vid: "ase9WRBvR3U", pdfId: "20250903-1725310376-YuKZHvgt.pdf", title: "সরলরেখা Lecture-06" }, // Corrected year
-            { vid: "w445dSaUjts", pdfId: "20250904-1725470806-o6JiE6X1.pdf", title: "সরলরেখা Lecture-07" }, // Corrected year
-            { vid: "q8YfPhSJbm8", pdfId: "20250907-1725726771-R1o2uRie.pdf", title: "সরলরেখা Lecture-08" }, // Corrected year
-            { vid: "IgryrCnxT6A", pdfId: "20250910-1725910387-3nirqIob.pdf", title: "সরলরেখা Lecture-09" }, // Corrected year
-            { vid: "lkNZcQmxBks", pdfId: "20250912-1726086179-i5RJJif1.pdf", title: "সরলরেখা Lecture-10" }, // Corrected year
-            { vid: "7um792d6yNg", pdfId: "20250915-1726343754-Nb55lpPg.pdf", title: "সরলরেখা Lecture-11" }, // Corrected year
-            { vid: "MMWGKNo5NsQ", pdfId: "20250919-1726739546-pMfDheYO.pdf", title: "সরলরেখা Lecture-12" }, // Corrected year
-            { vid: "AowCYU7ELqk", pdfId: "20250922-1726946330-6tG3CY8t.pdf", title: "সরলরেখা Lecture-13" }, // Corrected year
-            { vid: "gOmdejdZ_r4", pdfId: "20250924-1727122179-Vk3NbP3u.pdf", title: "সরলরেখা Lecture-14" }, // Corrected year
-            { vid: "jXhE02TLzJc", pdfId: "20250925-1727285865-kxD53nU5.pdf", title: "সরলরেখা Lecture-15" }, // Corrected year
-            { vid: "1aKRtC5avo0", pdfId: "20250929-1727547719-0U0Uj619.pdf", title: "সরলরেখা Lecture-16" }, // Corrected year
-            { vid: "vC_nu7aBsPo", pdfId: "20241003-1727892426-oAF2n66y.pdf", title: "বৃত্ত - পর্ব ০১" },
-            { vid: "tmqoSDer0_A", pdfId: "20241008-1728324955-seb0BFoO.pdf", title: "বৃত্ত - পর্ব ০২" },
-            { vid: "fkZTAWt5oVY", pdfId: "20241010-1728503474-vTq3l7p4.pdf", title: "বৃত্ত - পর্ব ০৩" },
-            { vid: "NekC-bXHMXY", pdfId: "20241015-1728967316-0n7vzF7p.pdf", title: "বৃত্ত - পর্ব ০৪" },
-            { vid: "RxhCyAOqGWM", pdfId: "20241016-1729086446-VPfOjLCL.pdf", title: "বৃত্ত - পর্ব ০৫" },
-            { vid: "DUrma6I4dtI", pdfId: "20241020-1729363267-NqvEV4Hm.pdf", title: "বৃত্ত - পর্ব ০৬" },
-            { vid: "CROC_RI_atI", pdfId: "20241021-1729532779-wSWc45KK.pdf", title: "বৃত্ত - পর্ব ০৭" },
-            { vid: "_m4a2CYuVno", pdfId: null, title: "ত্রিকোণমিতি সূত্র" }, // This entry has no PDF
-            { vid: "MW8xW_5sLkM", pdfId: "20241105-1730748335-jDFASON4.pdf", title: "ত্রিকোণমিতি - পর্ব ০১" },
-            { vid: "rXUvqbvpFKE", pdfId: "20241107-1730925357-JoP4d7MA.pdf", title: "ত্রিকোণমিতি - পর্ব ০২" },
-            { vid: "LgnfCqZLsUE", pdfId: "20241112-1731353973-SmfGgVSE.pdf", title: "ত্রিকোণমিতি - পর্ব ০৩" },
-            { vid: "1BvwfJcCFYI", pdfId: "20241115-1731619576-T6EgQjlk.pdf", title: "ত্রিকোণমিতি - পর্ব ০৪" },
-            { vid: "kuR9YOGPXOc", pdfId: "20241116-1731772257-1JRZKR9F.pdf", title: "ত্রিকোণমিতি - পর্ব ০৫" },
-            { vid: "nz853OgzXis", pdfId: "20241120-1732116971-64wITLEm.pdf", title: "ত্রিকোণমিতি - পর্ব ০৬" },
-            { vid: "8WnIDLxdiVA", pdfId: "20241123-1732383725-W0bOr7kc.pdf", title: "ত্রিকোণমিতি - পর্ব ০৭" },
-            { vid: "hlFYDJpxSW4", pdfId: "20241126-1732568676-be07Pykf.pdf", title: "ত্রিকোণমিতি - পর্ব ০৮" },
-            { vid: "5AOn5LqY1z0", pdfId: "20241201-1733004093-MDDPOHIN.pdf", title: "ত্রিকোণমিতি - পর্ব ০৯" },
-            { vid: "dyOQEk8QkDs", pdfId: "20241205-1733350378-Cn46JrDy.pdf", title: "ত্রিকোণমিতি - পর্ব ১০" },
-            { vid: "WU1rWRfuRDU", pdfId: "20241211-1733860627-Dabjpa9H.pdf", title: "ত্রিকোণমিতি - পর্ব ১১" },
-            { vid: "wyWqUYkftBc", pdfId: "20241212-1733947332-0fUo1PYz.pdf", title: "ত্রিকোণমিতি - পর্ব ১২" },
-            { vid: "r7tKblwAGCc", pdfId: "20241215-1734209456-dZOPLcvr.pdf", title: "ত্রিকোণমিতি - পর্ব ১৩" },
-            { vid: "cSWOtlpxwxE", pdfId: "20241219-1734549107-6TLXCe8W.pdf", title: "ত্রিকোণমিতি - পর্ব  ১৪" },
-            { vid: "CKPxAzWwaU0", pdfId: "20241224-1734985667-X15J2Vfu.pdf", title: "ত্রিকোণমিতি - পর্ব ১৫" },
-            { vid: "zaGv1bDWmgg", pdfId: "20241225-1735124701-PjGUYSo5.pdf", title: "ত্রিকোণমিতি | সৃজনশীল | EndGame CQ Solving Series" },
-            { vid: "dGOXGSHRhVQ", pdfId: "20241229-1735416947-31g7Pre1.pdf", title: "ত্রিকোণমিতি  - পর্ব ১৬" },
-            { vid: "Q50fglFIO08", pdfId: "20250105-1736018668-fzfdEMUP.pdf", title: "অ অন্তরীকরণ পর্ব  - ০১" }, // Corrected title based on pattern
-            { vid: "iuPiqzfqezA", pdfId: "20250107-1736190063-rzlyQ8ws.pdf", title: "অ অন্তরীকরণ - পর্ব ০২" }, // Corrected title
-            { vid: "K2gswMSlGAs", pdfId: "20250109-1736362963-OGYXeHgK.pdf", title: "অ অন্তরীকরণ - পর্ব ৩.১" }, // Corrected title
-            { vid: "mWKr3qQeeZQ", pdfId: "20250109-1736362963-OGYXeHgK.pdf", title: "অ অন্তরীকরণ - পর্ব ৩.২" }, // Corrected title
-            { vid: "Ubi5W-641Fg", pdfId: "20250112-1736620341-KIrXmjmF.pdf", title: "অ অন্তরীকরণ - পর্ব ০৪" }, // Corrected title
-            { vid: "SRbknXfQNq4", pdfId: "20250116-1736966630-aQWYWPDq.pdf", title: "অ অন্তরীকরণ - পর্ব ০৫" }, // Corrected title
-            { vid: "Wx9JLzOsPbs", pdfId: "20250119-1737227519-tyPBdw0t.pdf", title: "অ অন্তরীকরণ - পর্ব ০৬" }, // Corrected title
-            { vid: "h3O_HKfaS6g", pdfId: "20250121-1737406393-Q6Jhxoag.pdf", title: "অ অন্তরীকরণ - পর্ব ০৭" }, // Corrected title
-            { vid: "apClGBML860", pdfId: "20250122-1737563379-SUj5gZpu.pdf", title: "অ অন্তরীকরণ - পর্ব ০৮" }, // Corrected title
-            { vid: "K_vMZBVDpPA", pdfId: "20250129-1738091373-YYN1WXHR.pdf", title: "অ অন্তরীকরন - পর্ব ০৯" }, // Corrected title
-            { vid: "nOy4RDAsSUs", pdfId: "20250129-1738170575-MNVwpD7m.pdf", title: "অ অন্তরীকরন - পর্ব ১০" }, // Corrected title
-            { vid: "kU92DY0a12Q", pdfId: "20250131-1738264795-1NsQNXFy.pdf", title: "অ অন্তরীকরন - পর্ব ১১" }, // Corrected title
-            { vid: "AfLdrDLhQQs", pdfId: "20250211-1739217925-5warnilX.pdf", title: "যোগজীকরণ - পর্ব ০১" },
-            { vid: "qrzDmWDTy9g", pdfId: "20250218-1739821698-vc5xjN2n.pdf", title: "যোগজীকরণ - পর্ব ০২" },
-            { vid: "pUn0IXkxO3Y", pdfId: "20250220-1739992579-Nb6C4GoX.pdf", title: "যোগজীকরণ - পর্ব ০৩" },
-            { vid: "JncQOzGjeBI", pdfId: "20250223-1740247740-aFxsUVuC.pdf", title: "যোগজীকরণ - পর্ব ০৪" },
-            { vid: "9EEguTE7lNE", pdfId: "20250227-1740658879-wMVBkkxR.pdf", title: "যোগজীকরণ - পর্ব ০৫" },
-            { vid: "vaTcPeQjQaM", pdfId: "20240304-1741101414-ZJCvLwrQ.pdf", title: "যোগজীকরণ - পর্ব ০৬" }, // Corrected year
-            { vid: "Sh6IBU4KySI", pdfId: "20240308-1741456359-81zjr1PY.pdf", title: "যোগজীকরণ - পর্ব ০৭" }, // Corrected year
-            { vid: "3nOWrTPZO_8", pdfId: "20240315-1742047395-gUXKrQRs.pdf", title: "যোগজীকরণ - পর্ব  ০ আট" }, // Corrected title
-            { vid: "whqBquJ6Nsk", pdfId: "20240417-1744893010-cn8stI0S.pdf", title: "যোগজীকরণ - পর্ব ০৯" }, // Corrected year
-            { vid: "-FlXDm04HFk", pdfId: "20240322-1742645970-u1WvxylW.pdf", title: "যোগজীকরণ - পর্ব ১০" }, // Corrected year
-            { vid: "CfBXIbgL8t4", pdfId: "20240417-1744892819-AeCcdnl0.pdf", title: "যোগজীকরণ - পর্ব  ১১" }, // Corrected year
-            { vid: "0nFYv7cIQ_Y", pdfId: "20240422-1745272821-oidKO6le.pdf", title: "যোগজীকরণ - MCQ Solving" }, // Corrected year
-            { vid: "4GpRS_wInwk", pdfId: "20240427-1745747518-LwmpPRob.pdf", title: "যোগজীকরণ - CQ Solving" }, // Corrected year
-            { vid: "Y5YVtnaXAFE", pdfId: "20240501-1746044627-mGPh09i8.pdf", title: "বিন্যাস ও সমাবেশ - পর্ব ০১" }, // Corrected year
+        // Class data for the chemistry course
+        const classData = [
+          [
+  {
+    "videoId": "ZWV4SQpWtss",
+    "title": "ম্যাট্রিক্স ও নির্ণায়ক Lecture-01",
+    "pdfLink": "20240525-1716657377-wtegG8pK.pdf",
+    "duration": "N/A",
+    "date": "May 25, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "V0wRoNVu7BY",
+    "title": "ম্যাট্রিক্স ও নির্ণায়ক Lecture-02",
+    "pdfLink": "20240527-1716831940-SPQSAHEx.pdf",
+    "duration": "N/A",
+    "date": "May 27, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "GtRyM-r4CrY",
+    "title": "ম্যাট্রিক্স ও নির্ণায়ক Lecture-03",
+    "pdfLink": "20240530-1717013904-4riy1B1D.pdf",
+    "duration": "N/A",
+    "date": "May 30, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "RK_8H673ENw",
+    "title": "ম্যাট্রিক্স ও নির্ণায়ক Lecture-04",
+    "pdfLink": "20240604-1717444361-E5HblYin.pdf",
+    "duration": "N/A",
+    "date": "Jun 04, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "ja6j4RW-9oI",
+    "title": "ম্যাট্রিক্স ও নির্ণায়ক Lecture-05",
+    "pdfLink": "20240606-1717613524-x1zyd7DC.pdf",
+    "duration": "N/A",
+    "date": "Jun 06, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "mayvWXh2FZI",
+    "title": "ম্যাট্রিক্স ও নির্ণায়ক Lecture-06",
+    "pdfLink": "20240611-1718052241-ibTIJLPQ.pdf",
+    "duration": "N/A",
+    "date": "Jun 11, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "PCDFnegoR0k",
+    "title": "ম্যাট্রিক্স ও নির্ণায়ক Lecture-07",
+    "pdfLink": "20240613-1718272988-NTjK0GrO.pdf",
+    "duration": "N/A",
+    "date": "Jun 13, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "KobHUDMJrjY",
+    "title": "ম্যাট্রিক্স ও নর্ণায়ক Lecture-08",
+    "pdfLink": "20240627-1719429854-jqzVksct.pdf",
+    "duration": "N/A",
+    "date": "Jun 27, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "Oj7vlnDk94A",
+    "title": "ম্যাট্রিক্স ও নর্ণায়ক Lecture-09",
+    "pdfLink": "20240629-1719678121-BD7G0hl8.pdf",
+    "duration": "N/A",
+    "date": "Jun 29, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "wm8v4f1KvLM",
+    "title": "ম্যাট্রিক্স ও নর্ণায়ক Lecture-10",
+    "pdfLink": "20240704-1720036905-uQQmqCGq.pdf",
+    "duration": "N/A",
+    "date": "Jul 04, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "QbfXd8qxelc",
+    "title": "ম্যাট্রিক্স ও নর্ণায়ক Lecture-11",
+    "pdfLink": "20240707-1720305815-bclUHsag.pdf",
+    "duration": "N/A",
+    "date": "Jul 07, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "u054u26gThs",
+    "title": "ম্যাট্রিক্স ও নর্ণায়ক Lecture-12",
+    "pdfLink": "20240709-1720463516-mw6GkFG4.pdf",
+    "duration": "N/A",
+    "date": "Jul 09, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "79AJfX3C268",
+    "title": "ম্যাট্রিক্স ও নর্ণায়ক Lecture-13",
+    "pdfLink": "20240711-1720641535-HlsyfXTg.pdf",
+    "duration": "N/A",
+    "date": "Jul 11, 2024",
+    "category": "ম্যাট্রিক্স ও নির্ণায়ক"
+  },
+  {
+    "videoId": "v83ZpxsVlNc",
+    "title": "সরলরেখা Lecture-01",
+    "pdfLink": "20240818-1723919995-h8rvyOm4.pdf",
+    "duration": "N/A",
+    "date": "Aug 18, 2024",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "qcWkDbCpvq4",
+    "title": "সরলরেখা Lecture-02",
+    "pdfLink": "20240820-1724103259-oYgcGqXf.pdf",
+    "duration": "N/A",
+    "date": "Aug 20, 2024",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "CPd8s72lBmA",
+    "title": "সরলরেখা Lecture-03",
+    "pdfLink": "20240822-1724273589-LCQXlpbK.pdf",
+    "duration": "N/A",
+    "date": "Aug 22, 2024",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "_YYE3agv2ss",
+    "title": "সরলরেখা Lecture-04",
+    "pdfLink": "20240829-1724875156-J6Nz6Wm8.pdf",
+    "duration": "N/A",
+    "date": "Aug 29, 2024",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "bDAPJpfug94",
+    "title": "সরলরেখা Lecture-05",
+    "pdfLink": "20250901-1725132597-A0xlfrRE.pdf",
+    "duration": "N/A",
+    "date": "Sep 01, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "ase9WRBvR3U",
+    "title": "সরলরেখা Lecture-06",
+    "pdfLink": "20250903-1725310376-YuKZHvgt.pdf",
+    "duration": "N/A",
+    "date": "Sep 03, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "w445dSaUjts",
+    "title": "সরলরেখা Lecture-07",
+    "pdfLink": "20250904-1725470806-o6JiE6X1.pdf",
+    "duration": "N/A",
+    "date": "Sep 04, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "q8YfPhSJbm8",
+    "title": "সরলরেখা Lecture-08",
+    "pdfLink": "20250907-1725726771-R1o2uRie.pdf",
+    "duration": "N/A",
+    "date": "Sep 07, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "IgryrCnxT6A",
+    "title": "সরলরেখা Lecture-09",
+    "pdfLink": "20250910-1725910387-3nirqIob.pdf",
+    "duration": "N/A",
+    "date": "Sep 10, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "lkNZcQmxBks",
+    "title": "সরলরেখা Lecture-10",
+    "pdfLink": "20250912-1726086179-i5RJJif1.pdf",
+    "duration": "N/A",
+    "date": "Sep 12, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "7um792d6yNg",
+    "title": "সরলরেখা Lecture-11",
+    "pdfLink": "20250915-1726343754-Nb55lpPg.pdf",
+    "duration": "N/A",
+    "date": "Sep 15, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "MMWGKNo5NsQ",
+    "title": "সরলরেখা Lecture-12",
+    "pdfLink": "20250919-1726739546-pMfDheYO.pdf",
+    "duration": "N/A",
+    "date": "Sep 19, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "AowCYU7ELqk",
+    "title": "সরলরেখা Lecture-13",
+    "pdfLink": "20250922-1726946330-6tG3CY8t.pdf",
+    "duration": "N/A",
+    "date": "Sep 22, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "gOmdejdZ_r4",
+    "title": "সরলরেখা Lecture-14",
+    "pdfLink": "20250924-1727122179-Vk3NbP3u.pdf",
+    "duration": "N/A",
+    "date": "Sep 24, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "jXhE02TLzJc",
+    "title": "সরলরেখা Lecture-15",
+    "pdfLink": "20250925-1727285865-kxD53nU5.pdf",
+    "duration": "N/A",
+    "date": "Sep 25, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "1aKRtC5avo0",
+    "title": "সরলরেখা Lecture-16",
+    "pdfLink": "20250929-1727547719-0U0Uj619.pdf",
+    "duration": "N/A",
+    "date": "Sep 29, 2025",
+    "category": "সরলরেখা"
+  },
+  {
+    "videoId": "vC_nu7aBsPo",
+    "title": "বৃত্ত - পর্ব ০১",
+    "pdfLink": "20241003-1727892426-oAF2n66y.pdf",
+    "duration": "N/A",
+    "date": "Oct 03, 2024",
+    "category": "বৃত্ত"
+  },
+  {
+    "videoId": "tmqoSDer0_A",
+    "title": "বৃত্ত - পর্ব ০২",
+    "pdfLink": "20241008-1728324955-seb0BFoO.pdf",
+    "duration": "N/A",
+    "date": "Oct 08, 2024",
+    "category": "বৃত্ত"
+  },
+  {
+    "videoId": "fkZTAWt5oVY",
+    "title": "বৃত্ত - পর্ব ০৩",
+    "pdfLink": "20241010-1728503474-vTq3l7p4.pdf",
+    "duration": "N/A",
+    "date": "Oct 10, 2024",
+    "category": "বৃত্ত"
+  },
+  {
+    "videoId": "NekC-bXHMXY",
+    "title": "বৃত্ত - পর্ব ০৪",
+    "pdfLink": "20241015-1728967316-0n7vzF7p.pdf",
+    "duration": "N/A",
+    "date": "Oct 15, 2024",
+    "category": "বৃত্ত"
+  },
+  {
+    "videoId": "RxhCyAOqGWM",
+    "title": "বৃত্ত - পর্ব ০৫",
+    "pdfLink": "20241016-1729086446-VPfOjLCL.pdf",
+    "duration": "N/A",
+    "date": "Oct 16, 2024",
+    "category": "বৃত্ত"
+  },
+  {
+    "videoId": "DUrma6I4dtI",
+    "title": " বৃত্ত - পর্ব ০৬",
+    "pdfLink": "20241020-1729363267-NqvEV4Hm.pdf",
+    "duration": "N/A",
+    "date": "Oct 20, 2024",
+    "category": "বৃত্ত"
+  },
+  {
+    "videoId": "CROC_RI_atI",
+    "title": "বৃত্ত - পর্ব ০৭",
+    "pdfLink": "20241021-1729532779-wSWc45KK.pdf",
+    "duration": "N/A",
+    "date": "Oct 21, 2024",
+    "category": "বৃত্ত"
+  },
+  {
+    "videoId": "_m4a2CYuVno",
+    "title": "ত্রিকোণমিতি সূত্র",
+    "pdfLink": null,
+    "duration": "N/A",
+    "date": "N/A",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "MW8xW_5sLkM",
+    "title": "ত্রিকোণমিতি - পর্ব ০১",
+    "pdfLink": "20241105-1730748335-jDFASON4.pdf",
+    "duration": "N/A",
+    "date": "Nov 05, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "rXUvqbvpFKE",
+    "title": "ত্রিকোণমিতি - পর্ব ০২",
+    "pdfLink": "20241107-1730925357-JoP4d7MA.pdf",
+    "duration": "N/A",
+    "date": "Nov 07, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "LgnfCqZLsUE",
+    "title": "ত্রিকোণমিতি - পর্ব ০৩",
+    "pdfLink": "20241112-1731353973-SmfGgVSE.pdf",
+    "duration": "N/A",
+    "date": "Nov 12, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "1BvwfJcCFYI",
+    "title": "ত্রিকোণমিতি - পর্ব ০৪",
+    "pdfLink": "20241115-1731619576-T6EgQjlk.pdf",
+    "duration": "N/A",
+    "date": "Nov 15, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "kuR9YOGPXOc",
+    "title": "ত্রিকোণমিতি - পর্ব ০৫",
+    "pdfLink": "20241116-1731772257-1JRZKR9F.pdf",
+    "duration": "N/A",
+    "date": "Nov 16, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "nz853OgzXis",
+    "title": "ত্রিকোণমিতি - পর্ব ০৬",
+    "pdfLink": "20241120-1732116971-64wITLEm.pdf",
+    "duration": "N/A",
+    "date": "Nov 20, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "8WnIDLxdiVA",
+    "title": "ত্রিকোণমিতি - পর্ব ০৭",
+    "pdfLink": "20241123-1732383725-W0bOr7kc.pdf",
+    "duration": "N/A",
+    "date": "Nov 23, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "hlFYDJpxSW4",
+    "title": "ত্রিকোণমিতি - পর্ব ০৮",
+    "pdfLink": "20241126-1732568676-be07Pykf.pdf",
+    "duration": "N/A",
+    "date": "Nov 26, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "5AOn5LqY1z0",
+    "title": "ত্রিকোণমিতি - পর্ব ০৯",
+    "pdfLink": "20241201-1733004093-MDDPOHIN.pdf",
+    "duration": "N/A",
+    "date": "Dec 01, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "dyOQEk8QkDs",
+    "title": "ত্রিকোণমিতি - পর্ব ১০",
+    "pdfLink": "20241205-1733350378-Cn46JrDy.pdf",
+    "duration": "N/A",
+    "date": "Dec 05, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "WU1rWRfuRDU",
+    "title": "ত্রিকোণমিতি - পর্ব ১১",
+    "pdfLink": "20241211-1733860627-Dabjpa9H.pdf",
+    "duration": "N/A",
+    "date": "Dec 11, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "wyWqUYkftBc",
+    "title": "ত্রিকোণমিতি - পর্ব ১২",
+    "pdfLink": "20241212-1733947332-0fUo1PYz.pdf",
+    "duration": "N/A",
+    "date": "Dec 12, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "r7tKblwAGCc",
+    "title": "ত্রিকোণমিতি - পর্ব ১৩",
+    "pdfLink": "20241215-1734209456-dZOPLcvr.pdf",
+    "duration": "N/A",
+    "date": "Dec 15, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "cSWOtlpxwxE",
+    "title": "ত্রিকোণমিতি - পর্ব  ১৪",
+    "pdfLink": "20241219-1734549107-6TLXCe8W.pdf",
+    "duration": "N/A",
+    "date": "Dec 19, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "CKPxAzWwaU0",
+    "title": "ত্রিকোণমিতি - পর্ব ১৫",
+    "pdfLink": "20241224-1734985667-X15J2Vfu.pdf",
+    "duration": "N/A",
+    "date": "Dec 24, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "zaGv1bDWmgg",
+    "title": "ত্রিকোণমিতি | সৃজনশীল | EndGame CQ Solving Series",
+    "pdfLink": "20241225-1735124701-PjGUYSo5.pdf",
+    "duration": "N/A",
+    "date": "Dec 25, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "dGOXGSHRhVQ",
+    "title": "ত্রিকোণমিতি  - পর্ব ১৬",
+    "pdfLink": "20241229-1735416947-31g7Pre1.pdf",
+    "duration": "N/A",
+    "date": "Dec 29, 2024",
+    "category": "ত্রিকোণমিতি"
+  },
+  {
+    "videoId": "Q50fglFIO08",
+    "title": "অ অন্তরীকরণ পর্ব  - ০১",
+    "pdfLink": "20250105-1736018668-fzfdEMUP.pdf",
+    "duration": "N/A",
+    "date": "Jan 05, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "iuPiqzfqezA",
+    "title": "অ অন্তরীকরণ - পর্ব ০২",
+    "pdfLink": "20250107-1736190063-rzlyQ8ws.pdf",
+    "duration": "N/A",
+    "date": "Jan 07, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "K2gswMSlGAs",
+    "title": "অ অন্তরীকরণ - পর্ব ৩.১",
+    "pdfLink": "20250109-1736362963-OGYXeHgK.pdf",
+    "duration": "N/A",
+    "date": "Jan 09, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "mWKr3qQeeZQ",
+    "title": "অ অন্তরীকরণ - পর্ব ৩.২",
+    "pdfLink": "20250109-1736362963-OGYXeHgK.pdf",
+    "duration": "N/A",
+    "date": "Jan 09, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "Ubi5W-641Fg",
+    "title": "অ অন্তরীকরণ - পর্ব ০৪",
+    "pdfLink": "20250112-1736620341-KIrXmjmF.pdf",
+    "duration": "N/A",
+    "date": "Jan 12, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "SRbknXfQNq4",
+    "title": "অ অন্তরীকরণ - পর্ব ০৫",
+    "pdfLink": "20250116-1736966630-aQWYWPDq.pdf",
+    "duration": "N/A",
+    "date": "Jan 16, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "Wx9JLzOsPbs",
+    "title": "অ অন্তরীকরণ - পর্ব ০৬",
+    "pdfLink": "20250119-1737227519-tyPBdw0t.pdf",
+    "duration": "N/A",
+    "date": "Jan 19, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "h3O_HKfaS6g",
+    "title": "অ অন্তরীকরণ - পর্ব ০৭",
+    "pdfLink": "20250121-1737406393-Q6Jhxoag.pdf",
+    "duration": "N/A",
+    "date": "Jan 21, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "apClGBML860",
+    "title": "অ অন্তরীকরণ - পর্ব ০৮",
+    "pdfLink": "20250122-1737563379-SUj5gZpu.pdf",
+    "duration": "N/A",
+    "date": "Jan 22, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "K_vMZBVDpPA",
+    "title": "অ অন্তরীকরন - পর্ব ০৯",
+    "pdfLink": "20250129-1738091373-YYN1WXHR.pdf",
+    "duration": "N/A",
+    "date": "Jan 29, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "nOy4RDAsSUs",
+    "title": "অ অন্তরীকরন - পর্ব ১০",
+    "pdfLink": "20250129-1738170575-MNVwpD7m.pdf",
+    "duration": "N/A",
+    "date": "Jan 29, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "kU92DY0a12Q",
+    "title": "অ অন্তরীকরন - পর্ব ১১",
+    "pdfLink": "20250131-1738264795-1NsQNXFy.pdf",
+    "duration": "N/A",
+    "date": "Jan 31, 2025",
+    "category": "অ অন্তরীকরণ"
+  },
+  {
+    "videoId": "AfLdrDLhQQs",
+    "title": "যোগজীকরণ - পর্ব ০১",
+    "pdfLink": "20250211-1739217925-5warnilX.pdf",
+    "duration": "N/A",
+    "date": "Feb 11, 2025",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "qrzDmWDTy9g",
+    "title": "যোগজীকরণ - পর্ব ০২",
+    "pdfLink": "20250218-1739821698-vc5xjN2n.pdf",
+    "duration": "N/A",
+    "date": "Feb 18, 2025",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "pUn0IXkxO3Y",
+    "title": "যোগজীকরণ - পর্ব ০৩",
+    "pdfLink": "20250220-1739992579-Nb6C4GoX.pdf",
+    "duration": "N/A",
+    "date": "Feb 20, 2025",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "JncQOzGjeBI",
+    "title": "যোগজীকরণ - পর্ব ০৪",
+    "pdfLink": "20250223-1740247740-aFxsUVuC.pdf",
+    "duration": "N/A",
+    "date": "Feb 23, 2025",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "9EEguTE7lNE",
+    "title": "যোগজীকরণ - পর্ব ০৫",
+    "pdfLink": "20250227-1740658879-wMVBkkxR.pdf",
+    "duration": "N/A",
+    "date": "Feb 27, 2025",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "vaTcPeQjQaM",
+    "title": "যোগজীকরণ - পর্ব ০৬",
+    "pdfLink": "20240304-1741101414-ZJCvLwrQ.pdf",
+    "duration": "N/A",
+    "date": "Mar 04, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "Sh6IBU4KySI",
+    "title": "যোগজীকরণ - পর্ব ০৭",
+    "pdfLink": "20240308-1741456359-81zjr1PY.pdf",
+    "duration": "N/A",
+    "date": "Mar 08, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "3nOWrTPZO_8",
+    "title": "যোগজীকরণ - পর্ব  ০ আট",
+    "pdfLink": "20240315-1742047395-gUXKrQRs.pdf",
+    "duration": "N/A",
+    "date": "Mar 15, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "whqBquJ6Nsk",
+    "title": "যোগজীকরণ - পর্ব ০৯",
+    "pdfLink": "20240417-1744893010-cn8stI0S.pdf",
+    "duration": "N/A",
+    "date": "Apr 17, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "-FlXDm04HFk",
+    "title": "যোগজীকরণ - পর্ব ১০",
+    "pdfLink": "20240322-1742645970-u1WvxylW.pdf",
+    "duration": "N/A",
+    "date": "Mar 22, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "CfBXIbgL8t4",
+    "title": "যোগজীকরণ - পর্ব  ১১",
+    "pdfLink": "20240417-1744892819-AeCcdnl0.pdf",
+    "duration": "N/A",
+    "date": "Apr 17, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "0nFYv7cIQ_Y",
+    "title": "যোগজীকরণ - MCQ Solving",
+    "pdfLink": "20240422-1745272821-oidKO6le.pdf",
+    "duration": "N/A",
+    "date": "Apr 22, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "4GpRS_wInwk",
+    "title": "যোগজীকরণ - CQ Solving",
+    "pdfLink": "20240427-1745747518-LwmpPRob.pdf",
+    "duration": "N/A",
+    "date": "Apr 27, 2024",
+    "category": "যোগজীকরণ"
+  },
+  {
+    "videoId": "Y5YVtnaXAFE",
+    "title": "বিন্যাস ও সমাবেশ - পর্ব ০১",
+    "pdfLink": "20240501-1746044627-mGPh09i8.pdf",
+    "duration": "N/A",
+    "date": "May 01, 2024",
+    "category": "বিন্যাস ও সমাবেশ"
+  }
+]
         ];
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          // DOM Elements
+          const currentVideoTitle = document.getElementById('current-video-title');
+          const currentVideoDuration = document.getElementById('current-video-duration');
+          const videoThumbnailContainer = document.getElementById('video-thumbnail-container');
+          const youtubeEmbedContainer = document.getElementById('youtube-embed-container');
+          const youtubeIframe = document.getElementById('youtube-iframe');
+          const videoThumbnail = document.getElementById('video-thumbnail');
+          const downloadPdfBtn = document.getElementById('download-pdf-btn');
+          const openYoutubeBtn = document.getElementById('open-youtube-btn');
+          const classList = document.getElementById('class-list');
+          const filterContainer = document.querySelector('.filter-scroll');
+          const currentYear = document.getElementById('current-year');
 
-        const PDF_BASE_URL = 'https://www.bondipathshala.com.bd/pdf/'; // Base URL for PDFs
+          // Current state
+          let currentVideoId = '';
+          let currentFilterCategory = null;
 
-         // Motivational quotes for students
-        const motivationalQuotes = [
-            "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
-            "The only way to do great work is to love what you do. - Steve Jobs",
-            "Education is the most powerful weapon which you can use to change the world. - Nelson Mandela",
-            "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
-            "Believe you can and you're halfway there. - Theodore Roosevelt",
-            "The mind is not a vessel to be filled, but a fire to be kindled. - Plutarch",
-            "Strive for progress, not perfection. - Unknown",
-            "Your education is a dress rehearsal for a life that is yours to lead. - Nora Ephron",
-            "The beautiful thing about learning is that no one can take it away from you. - B.B. King",
-            "The expert in anything was once a beginner. - Helen Hayes"
-        ];
+          // Set current year in footer
+          currentYear.textContent = new Date().getFullYear();
 
-        let currentQuoteIndex = 0;
-        const quoteElement = document.getElementById('motivational-quote');
+          // Initialize app
+          initializeApp();
 
-        // Get references to DOM elements
-        const youtubeIframe = document.getElementById('youtube-iframe');
-        const pdfLink = document.getElementById('pdf-link');
-        const pdfDownloadDiv = document.getElementById('pdf-download');
-        const lectureListUl = document.getElementById('lecture-list');
-        const playerAreaDiv = document.getElementById('player-area');
-        const lectureListAreaDiv = document.getElementById('lecture-list-area');
+          function initializeApp() {
+            renderCategoryFilters();
+            renderClassList();
+            loadLastWatchedVideo();
+            setupEventListeners();
+          }
 
-        // Function to load a specific lecture
-        function loadLecture(lecture) {
-            // Update iframe source
-            // Use youtube-nocookie.com for privacy enhancement and remove autoplay
-            const youtubeEmbedUrl = `https://www.youtube-nocookie.com/embed/${lecture.vid}?rel=0&modestbranding=1`; // Removed autoplay=1
-            youtubeIframe.src = youtubeEmbedUrl;
+          function renderCategoryFilters() {
+            // Get unique categories from classData
+            const categories = ['All Classes', ...new Set(classData.map(cls => cls.category))];
 
-            // Update PDF link visibility and href
-            if (lecture.pdfId) {
-                const pdfDownloadUrl = `${PDF_BASE_URL}${lecture.pdfId}`;
-                pdfLink.href = pdfDownloadUrl;
-                pdfDownloadDiv.style.display = 'block'; // Show the download link
-            } else {
-                pdfLink.href = '#'; // Set a dummy href
-                pdfDownloadDiv.style.display = 'none'; // Hide the download link
-            }
+            // Generate HTML for category filters
+            const filtersHtml = categories.map(category => {
+              const isActive = category === currentFilterCategory || (category === 'All Classes' && currentFilterCategory === null);
+              return `
+                <button class="category-btn ${isActive ? 'active' : ''}" data-category="${category === 'All Classes' ? '' : category}">
+                  ${category}
+                </button>
+              `;
+            }).join('');
 
-            // Update active class in the list
-            // Remove active class from all list items
-            lectureListUl.querySelectorAll('li').forEach(item => {
-                item.classList.remove('active');
-            });
-            // Add active class to the clicked item
-            const activeItem = lectureListUl.querySelector(`li[data-vid="${lecture.vid}"]`);
-            if (activeItem) {
-                activeItem.classList.add('active');
-                // Optional: Scroll the list to bring the active item into view
-                // Removed: activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+            // Insert HTML into filter container
+            filterContainer.innerHTML = filtersHtml;
 
-            // Sync heights after loading new video (optional, flexbox helps)
-            // Use a small timeout to allow iframe resize to potentially affect parent height
-             setTimeout(syncHeights, 100);
-        }
+            // Add event listeners to category buttons
+            document.querySelectorAll('.category-btn').forEach(button => {
+              button.addEventListener('click', function() {
+                const category = this.dataset.category;
+                currentFilterCategory = category || null;
 
-        // Function to populate the lecture list
-        function populateLectureList() {
-            lectureData.forEach(lecture => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('lecture-item');
-                // Add data attributes for video ID and PDF ID
-                listItem.dataset.vid = lecture.vid;
-                if (lecture.pdfId) {
-                    listItem.dataset.npdf = lecture.pdfId; // Using data-npdf as in original HTML
-                }
-                listItem.textContent = lecture.title;
-                listItem.tabIndex = 0; // Make list items focusable
-
-                // Add click event listener to each list item
-                listItem.addEventListener('click', () => {
-                    loadLecture(lecture);
+                // Update active state
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                  btn.classList.toggle('active',
+                    (btn.dataset.category === category) ||
+                    (btn.dataset.category === '' && category === '')
+                  );
                 });
 
-                lectureListUl.appendChild(listItem);
+                // Re-render class list with filter
+                renderClassList();
+              });
             });
-        }
+          }
 
-        // Function to synchronize the height of the list with the player area
-        function syncHeights() {
-             // Only sync heights if not on a small screen where stacking occurs
-            if (window.innerWidth > 768) {
-                // Reset height to allow content to dictate initial height
-                lectureListAreaDiv.style.height = 'auto';
-                // Use offsetHeight for the rendered height of the player area
-                const playerHeight = playerAreaDiv.offsetHeight;
-                lectureListAreaDiv.style.height = `${playerHeight}px`;
-            } else {
-                 // On small screens, remove fixed height and apply max-height for scrolling
-                 lectureListAreaDiv.style.height = 'auto';
-                 // Max-height is already set in CSS for small screens
+          function renderClassList() {
+            // Filter class data based on current filter
+            const filteredClasses = currentFilterCategory
+              ? classData.filter(cls => cls.category === currentFilterCategory)
+              : classData;
+
+            // Generate HTML for class list
+            const classListHtml = filteredClasses.map(cls => {
+              const isSelected = cls.videoId === currentVideoId;
+
+              return `
+                <li class="class-item ${isSelected ? 'selected' : ''}" data-video-id="${cls.videoId}">
+                  ${isSelected ? '<div class="selected-indicator"></div>' : ''}
+                  <div class="class-item-content">
+                    <div class="class-info">
+                      <div class="class-icon">
+                        <i class="fas fa-play-circle"></i>
+                        ${isSelected ? `
+                          <div class="playing-indicator">
+                            <div class="playing-indicator-ping"></div>
+                            <div class="playing-indicator-dot"></div>
+                          </div>
+                        ` : ''}
+                      </div>
+                      <div class="class-details">
+                        <h3 class="class-title">${cls.title}</h3>
+                        <div class="class-meta">
+                          <span class="class-meta-item">
+                            <i class="far fa-clock"></i>
+                            ${cls.duration}
+                          </span>
+                          <span class="class-meta-item">
+                            <i class="far fa-calendar-alt"></i>
+                            ${cls.date}
+                          </span>
+                          ${isSelected ? `
+                            <span class="now-playing">
+                              <i class="fas fa-circle"></i>
+                              Now Playing
+                            </span>
+                          ` : ''}
+                        </div>
+                      </div>
+                    </div>
+                    <a href="https://www.bondipathshala.com.bd/pdf/${cls.pdfLink}" target="_blank" class="class-pdf-link" onclick="event.stopPropagation()">
+                      <i class="fas fa-file-pdf"></i>
+                      PDF
+                    </a>
+                  </div>
+                </li>
+              `;
+            }).join('');
+
+            // Insert HTML into class list
+            classList.innerHTML = classListHtml;
+
+            // Add event listeners to class items
+            document.querySelectorAll('.class-item').forEach(item => {
+              item.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                selectVideo(videoId);
+              });
+            });
+          }
+
+          function loadLastWatchedVideo() {
+            // Try to load the last watched video from localStorage
+            const lastWatchedVideoId = localStorage.getItem('lastWatchedVideoId');
+            if (lastWatchedVideoId) {
+              selectVideo(lastWatchedVideoId);
+            } else if (classData.length > 0) {
+              // Default to first video if no saved video
+              selectVideo(classData[0].videoId);
             }
-        }
+          }
 
-        // Function to display the next motivational quote with fade animation
-        function showNextQuote() {
-            // Start fade-out
-            quoteElement.classList.add('fade-out');
+          function selectVideo(videoId) {
+            // Find the class data for this video
+            const classItem = classData.find(cls => cls.videoId === videoId);
+            if (!classItem) return;
 
-            // Wait for fade-out to complete, then change text and fade in
-            setTimeout(() => {
-                currentQuoteIndex = (currentQuoteIndex + 1) % motivationalQuotes.length;
-                quoteElement.textContent = motivationalQuotes[currentQuoteIndex];
-                // Remove fade-out class to trigger fade-in
-                quoteElement.classList.remove('fade-out');
-            }, 1000); // Match this duration to the CSS transition duration
-        }
+            // Update current state
+            currentVideoId = videoId;
 
+            // Update localStorage
+            localStorage.setItem('lastWatchedVideoId', videoId);
 
-        // Wait for the DOM to be fully loaded before initializing
-        document.addEventListener('DOMContentLoaded', () => {
-            // Populate the lecture list
-            populateLectureList();
+            // Update UI
+            currentVideoTitle.textContent = classItem.title;
+            currentVideoDuration.textContent = classItem.duration;
 
-            // Load the first lecture by default
-            if (lectureData.length > 0) {
-                loadLecture(lectureData[0]);
-            }
+            // Update video thumbnail
+            // Corrected thumbnail URL format
+            videoThumbnail.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+            videoThumbnail.alt = classItem.title;
 
-            // Sync heights initially
-            syncHeights();
+            // Reset video player - show thumbnail again
+            videoThumbnailContainer.classList.remove('hidden');
+            youtubeEmbedContainer.classList.add('hidden');
 
-            // Sync heights on window resize
-            window.addEventListener('resize', syncHeights);
+            // Update button actions
+            downloadPdfBtn.onclick = function() {
+              window.open(`https://www.bondipathshala.com.bd/pdf/${classItem.pdfLink}`, '_blank');
+            };
 
-             // Observe the player area for height changes (e.g., if content loads dynamically)
-            // This is a more robust way to handle height syncing
-            const resizeObserver = new ResizeObserver(entries => {
-                // Check if the observed element (playerAreaDiv) height has changed
-                for (let entry of entries) {
-                    if (entry.target === playerAreaDiv) {
-                        syncHeights();
-                        break; // Only need to react to playerAreaDiv changes
-                    }
-                }
+            openYoutubeBtn.onclick = function() {
+              // Corrected YouTube video URL format
+              window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+            };
+
+            // Re-render class list to update selection
+            renderClassList();
+          }
+
+          function loadYoutubeVideo(videoId) {
+            // Set iframe src
+            youtubeIframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&fs=1&iv_load_policy=3&cc_load_policy=0`;
+
+            // Hide thumbnail and show iframe
+            videoThumbnailContainer.classList.add('hidden');
+            youtubeEmbedContainer.classList.remove('hidden');
+          }
+
+          function setupEventListeners() {
+            // Click on thumbnail to play video
+            videoThumbnailContainer.addEventListener('click', function() {
+              loadYoutubeVideo(currentVideoId);
             });
 
-            // Start observing the player area
-            resizeObserver.observe(playerAreaDiv);
-
-            // Clean up the observer when the page is unloaded (optional but good practice)
-            window.addEventListener('beforeunload', () => {
-                resizeObserver.disconnect();
+            // Handle back button to reset history
+            window.addEventListener('popstate', function() {
+              if (window.location.pathname === '/') {
+                window.history.replaceState(null, '', '/');
+              }
             });
 
-            // Initialize the first quote
-            if (motivationalQuotes.length > 0) {
-                quoteElement.textContent = motivationalQuotes[currentQuoteIndex];
+            // Clean up history stack on page load
+            if (window.history.length > 2) {
+              window.history.replaceState(null, '', window.location.pathname);
             }
-
-            // Change quote periodically (e.g., every 10 seconds)
-            setInterval(showNextQuote, 10000); // Change quote every 10 seconds
+          }
         });
-
     </script>
-
 </body>
 </html>
