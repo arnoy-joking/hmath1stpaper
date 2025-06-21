@@ -41,190 +41,249 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdn.plyr.io/3.7.8/plyr.css" rel="stylesheet">
   <style>
-    body {
-      background: radial-gradient(circle at top, #0f0f3d, #000);
-      color: #e2e8f0;
-      min-height: 100vh;
-      background-attachment: fixed;
-      font-family: 'Segoe UI', sans-serif;
-    }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #1f1f1f;
+    color: #e5e7eb;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
 
-    header {
-      background-color: #000;
-      box-shadow: 0 0 10px #0ff;
-    }
+  header {
+    background-color: #2a2a2a;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 100%;
+    width: calc(100% - 2rem);
+    box-sizing: border-box;
+  }
 
-    .bg-white {
-      background-color: rgba(255, 255, 255, 0.05) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+  .bg-white {
+    background-color: #2f2f2f !important;
+    border: 1px solid #3a3a3a;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
 
-    .text-gray-100,
-    .text-lg {
-      color: #9cf !important;
-    }
+  .text-gray-100,
+  .text-lg {
+    color: #d4d4d4 !important;
+  }
 
-    #classList li {
-      color: #ccc;
-    }
+  #classList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-    #classList li:hover {
-      background-color: rgba(0, 255, 255, 0.1);
-    }
+  #classList li {
+    color: #d1d1d1;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    background-color: #262626;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s ease;
+  }
 
-    .bg-blue-200 {
-      background-color: rgba(0, 255, 255, 0.2) !important;
-    }
+  #classList li:hover {
+    background-color: #313131;
+  }
 
-    .text-red-500 {
-      color: #f56565;
-    }
+  .bg-blue-200 {
+    background-color: #3b3b3b !important;
+    border-radius: 1rem;
+    padding: 0.75rem;
+  }
 
-    .fake-button {
-      pointer-events: none;
-      opacity: 0.6;
-    }
+  .text-red-500 {
+    color: #ef4444;
+  }
 
-    .footer-quotes {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #888;
-    }
+  .fake-button {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 
-    .footer-quotes p {
-      margin-bottom: 0.5rem;
-    }
+  .footer-quotes {
+    font-size: 0.85rem;
+    color: #999;
+    text-align: center;
+    margin-top: 2rem;
+    padding: 0 1rem;
+  }
 
-    .download-emoji {
-      background-color: #0ff;
-      color: #000;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      transition: background 0.3s;
-    }
+  .footer-quotes p {
+    margin: 0.4rem 0;
+  }
 
-    .download-emoji:hover {
-      background-color: #0cc;
-    }
+  .download-emoji {
+    display: inline-block;
+    background-color: #3f3f3f;
+    color: #f0f0f0;
+    padding: 0.6rem 1.2rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    text-align: center;
+  }
 
-    .shadow-md {
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  .download-emoji:hover {
+    background-color: #4a4a4a;
+  }
+
+  .shadow-md {
+    border-radius: 1rem;
+  }
+
+  h1, h2 {
+    color: #e2e2e2;
+    font-size: 1.5rem;
+    margin: 1rem 0 0.5rem;
+    text-align: center;
+  }
+
+  footer {
+    background-color: #262626;
+    color: #b0b0b0;
+    border-top: 1px solid #333;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 1rem;
+    margin: 1rem auto 0;
+    width: calc(100% - 2rem);
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Plyr Customizations */
+  .plyr {
+    border-radius: 1rem;
+    background-color: #2a2a2a;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .plyr__video-wrapper {
+    background-color: #1e1e1e;
+  }
+
+  .plyr__control--overlaid {
+    background: #3a3a3a !important;
+    border-radius: 50%;
+    padding: 18px !important;
+  }
+
+  .plyr__control--overlaid svg {
+    width: 40px !important;
+    height: 40px !important;
+    color: #fff !important;
+  }
+
+  .plyr__controls {
+    background-color: #2e2e2e !important;
+    padding: 0.5rem 1rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  .plyr__controls .plyr__control svg {
+    color: #fff !important;
+  }
+
+  .plyr__controls .plyr__control:hover svg {
+    color: #ddd !important;
+  }
+
+  .plyr__progress {
+    width: 100% !important;
+    margin: auto !important;
+  }
+
+  .plyr__progress input[type=range] {
+    color: white !important;
+    height: 4px !important;
+  }
+
+  .plyr__progress input[type=range]::-webkit-slider-runnable-track,
+  .plyr__progress input[type=range]::-moz-range-track,
+  .plyr__progress input[type=range]::-ms-track {
+    background-color: #444 !important;
+    height: 4px !important;
+  }
+
+  .plyr__volume {
+    display: none !important;
+  }
+
+  .plyr__time {
+    color: #fff !important;
+  }
+
+  .plyr__tooltip {
+    background-color: #3a3a3a !important;
+    color: white !important;
+    border-radius: 0.4rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .plyr__menu__container {
+    background-color: #2e2e2e !important;
+    color: white !important;
+    border-radius: 0.4rem !important;
+    font-size: 0.9rem;
+  }
+
+  .plyr__menu__container [role=menuitemradio],
+  .plyr__menu__container [role=menuitem] {
+    color: white !important;
+  }
+
+  .plyr__menu__container [role=menuitemradio]:hover,
+  .plyr__menu__container [role=menuitem]:hover {
+    background-color: #3b3b3b !important;
+  }
+
+  .plyr__menu__container .plyr__control--active {
+    background-color: #444 !important;
+  }
+
+  .plyr__menu__container .plyr__control--active svg {
+    color: white !important;
+  }
+
+  /* Make everything scale better on small screens */
+  @media (max-width: 768px) {
+    header, footer, .bg-white {
+      width: calc(100% - 1.5rem);
+      margin-left: auto;
+      margin-right: auto;
     }
 
     h1, h2 {
-      text-shadow: 0 0 10px #0ff;
+      font-size: 1.25rem;
     }
 
-    footer {
-      background-color: #000;
-      color: #888;
-      border-top: 1px solid #222;
+    .download-emoji {
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
     }
-/* Plyr Customizations */
-    .plyr {
-    border-radius: 8px; /* Optional: if the player itself should have rounded corners */
-    overflow: hidden; /* To contain the gradient within rounded corners if any */
-}
 
-.plyr__video-wrapper {
-    background: linear-gradient(120deg, #6a0dad, #e53985, #ff8c42); /* Purple to Pink to Orange-Red */
-}
+    .plyr__control--overlaid {
+      padding: 14px !important;
+    }
 
-/* Big play button in the center */
-.plyr__control--overlaid {
-    background: rgba(255, 255, 255, 0.2) !important; /* Semi-transparent white circle */
-    border-radius: 50%;
-    padding: 20px !important; /* Adjust size */
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
-}
+    .plyr__control--overlaid svg {
+      width: 32px !important;
+      height: 32px !important;
+    }
+  }
+</style>
 
-.plyr__control--overlaid svg {
-    width: 50px !important; /* Adjust icon size */
-    height: 50px !important;
-    color: white !important;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));
-}
-
-/* General control icon color */
-.plyr__controls .plyr__control svg {
-    color: white !important;
-}
-.plyr__controls .plyr__control:hover svg {
-    color: #f0f0f0 !important; /* Slightly off-white on hover */
-}
-
-/* Progress bar */
-.plyr__progress {
-    max-width: 100% !important; /* Increase width of progress bar container */
-    width: 100% !important; /* Ensure it takes more space */
-    margin: center auto !important; /* Center it if needed */
-}
-
-.plyr__progress input[type=range] {
-    color: white !important; /* This sets the thumb and played progress color in Plyr */
-    height: 5px !important; /* Make it thinner */
-}
-
-/* Customizing the track of the progress bar */
-.plyr__progress input[type=range]::-webkit-slider-runnable-track {
-    background-color: rgba(255, 255, 255, 0.3) !important; /* Light track */
-    height: 5px !important;
-}
-.plyr__progress input[type=range]::-moz-range-track {
-    background-color: rgba(255, 255, 255, 0.3) !important; /* Light track */
-    height: 5px !important;
-}
-.plyr__progress input[type=range]::-ms-track {
-    background-color: rgba(255, 255, 255, 0.3) !important; /* Light track */
-    height: 5px !important;
-}
-
-/* Hide volume slider */
-.plyr__volume {
-    display: none !important;
-}
-
-/* Control bar background - make it transparent or semi-transparent */
-.plyr__controls {
-    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0)) !important; /* Darker at bottom, fading to transparent */
-    padding-top: 20px !important; /* Add padding so controls don't stick to the very bottom if gradient is too subtle */
-    border-bottom-left-radius: 8px; /* Match player radius */
-    border-bottom-right-radius: 8px;
-}
-
-/* Ensure text like current time is also white */
-.plyr__time {
-    color: white !important;
-}
-
-/* Tooltips for controls */
-.plyr__tooltip {
-    background: rgba(0,0,0,0.8) !important;
-    color: white !important;
-    border-radius: 4px !important;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.5) !important;
-}
-
-/* Settings menu */
-.plyr__menu__container {
-    background: rgba(0,0,0,0.85) !important;
-    color: white !important;
-    border-radius: 4px !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5) !important;
-}
-.plyr__menu__container [role=menuitemradio], .plyr__menu__container [role=menuitem] {
-    color: white !important;
-}
-.plyr__menu__container [role=menuitemradio]:hover, .plyr__menu__container [role=menuitem]:hover {
-    background: rgba(255,255,255,0.1) !important;
-}
-.plyr__menu__container .plyr__control--active {
-    background: rgba(255,255,255,0.2) !important;
-}
-.plyr__menu__container .plyr__control--active svg {
-    color: white !important;
-}
-  </style>
 </head>
 <body class="font-sans">
   <header class="bg-black text-white p-4 flex items-center">
@@ -236,7 +295,7 @@
     <div class="lg:w-3/4 bg-white rounded-lg shadow-md p-4">
       <h2 class="text-lg font-semibold mb-4 text-gray-100">Live Class</h2>
       <div style="position: relative;"> <!-- Wrapper for player and custom share button -->
-        <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="RUQcm3vIbWo"></div>
+        <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="lTRiuFIWV54"></div>
         <button id="customShareBtn" title="Share" style="position: absolute; top: 15px; right: 15px; z-index: 20; background: none; border: none; cursor: pointer; padding: 0;">
           <i class="fas fa-share-alt" style="color: white; font-size: 20px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));"></i>
         </button>
@@ -258,245 +317,26 @@
 
       <h2 class="text-lg font-semibold mb-4 text-gray-100">Class List</h2>
       <ul id="classList" class="space-y-2 max-h-96 overflow-y-auto">
-     <li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="ZWV4SQpWtss" data-nname="ম্যাট্রিক্স ও নির্ণায়ক Lecture-01" data-npdf="20240525-1716657377-wtegG8pK.pdf">
-  ম্যাট্রিক্স ও নির্ণায়ক Lecture-01 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
+       <li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="BzX25StCOyQ" data-nname="জৈব যৌগের ইতিহাস - পর্ব ০১" data-npdf="20250521-1747767276-zTUgBskf.pdf">
+  জৈব যৌগের ইতিহাস - পর্ব ০১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
 </li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="V0wRoNVu7BY" data-nname="ম্যাট্রিক্স ও নির্ণায়ক Lecture-02" data-npdf="20240527-1716831940-SPQSAHEx.pdf">
-  ম্যাট্রিক্স ও নির্ণায়ক Lecture-02 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
+<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="a_tsletdZjs" data-nname="জৈব যৌগের ইতিহাস - পর্ব ০২" data-npdf="20250525-1748120787-RXz1vtTE.pdf">
+  জৈব যৌগের ইতিহাস - পর্ব ০২ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
 </li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="GtRyM-r4CrY" data-nname="ম্যাট্রিক্স ও নির্ণায়ক Lecture-03" data-npdf="20240530-1717013904-4riy1B1D.pdf">
-  ম্যাট্রিক্স ও নির্ণায়ক Lecture-03 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
+<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="9055Ce-Ehd4" data-nname="জৈব যৌগের ইতিহাস  - পর্ব ০৩" data-npdf="20250526-1748209809-b0ltKw7V.pdf">
+  জৈব যৌগের ইতিহাস  - পর্ব ০৩ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
 </li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="RK_8H673ENw" data-nname="ম্যাট্রিক্স ও নির্ণায়ক Lecture-04" data-npdf="20240604-1717444361-E5HblYin.pdf">
-  ম্যাট্রিক্স ও নির্ণায়ক Lecture-04 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
+<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="CVCW92j2zSw" data-nname="জৈব যৌগ - পর্ব ০৪" data-npdf="20250529-1748503530-x3r34ooq.pdf">
+  জৈব যৌগের ইতিহাস - পর্ব ০৪ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
 </li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="ja6j4RW-9oI" data-nname="ম্যাট্রিক্স ও নির্ণায়ক Lecture-05" data-npdf="20240606-1717613524-x1zyd7DC.pdf">
-  ম্যাট্রিক্স ও নির্ণায়ক Lecture-05 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
+<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="XqMsgz9yTto" data-nname="জৈব যৌগ - পর্ব ০৫" data-npdf="20250530-1748546953-jhRBbO4q.pdf">
+  জৈব যৌগের ইতিহাস - পর্ব ০৫ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
 </li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="mayvWXh2FZI" data-nname="ম্যাট্রিক্স ও নির্ণায়ক Lecture-06" data-npdf="20240611-1718052241-ibTIJLPQ.pdf">
-  ম্যাট্রিক্স ও নির্ণায়ক Lecture-06 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
+        <li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="vaF4aRwLdok">
+  জৈব রসায়ন - পর্ব ০৬
 </li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="PCDFnegoR0k" data-nname="ম্যাট্রিক্স ও নির্ণায়ক Lecture-07" data-npdf="20240613-1718272988-NTjK0GrO.pdf">
-  ম্যাট্রিক্স ও নির্ণায়ক Lecture-07 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="KobHUDMJrjY" data-nname="ম্যাট্রিক্স ও নর্ণায়ক Lecture-08" data-npdf="20240627-1719429854-jqzVksct.pdf">
-  ম্যাট্রিক্স ও নর্ণায়ক Lecture-08 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="Oj7vlnDk94A" data-nname="ম্যাট্রিক্স ও নর্ণায়ক Lecture-09" data-npdf="20240629-1719678121-BD7G0hl8.pdf">
-  ম্যাট্রিক্স ও নর্ণায়ক Lecture-09 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="wm8v4f1KvLM" data-nname="ম্যাট্রিক্স ও নর্ণায়ক Lecture-10" data-npdf="20240704-1720036905-uQQmqCGq.pdf">
-  ম্যাট্রিক্স ও নর্ণায়ক Lecture-10 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="QbfXd8qxelc" data-nname="ম্যাট্রিক্স ও নর্ণায়ক Lecture-11" data-npdf="20240707-1720305815-bclUHsag.pdf">
-  ম্যাট্রিক্স ও নর্ণায়ক Lecture-11 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="u054u26gThs" data-nname="ম্যাট্রিক্স ও নর্ণায়ক Lecture-12" data-npdf="20240709-1720463516-mw6GkFG4.pdf">
-  ম্যাট্রিক্স ও নর্ণায়ক Lecture-12 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="79AJfX3C268" data-nname="ম্যাট্রিক্স ও নর্ণায়ক Lecture-13" data-npdf="20240711-1720641535-HlsyfXTg.pdf">
-  ম্যাট্রিক্স ও নর্ণায়ক Lecture-13 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="v83ZpxsVlNc" data-nname="সরলরেখা Lecture-01" data-npdf="20240818-1723919995-h8rvyOm4.pdf">
-  সরলরেখা Lecture-01 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="qcWkDbCpvq4" data-nname="সরলরেখা Lecture-02" data-npdf="20240820-1724103259-oYgcGqXf.pdf">
-  সরলরেখা Lecture-02 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="CPd8s72lBmA" data-nname="সরলরেখা Lecture-03" data-npdf="20240822-1724273589-LCQXlpbK.pdf">
-  সরলরেখা Lecture-03 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="_YYE3agv2ss" data-nname="সরলরেখা Lecture-04" data-npdf="20240829-1724875156-J6Nz6Wm8.pdf">
-  সরলরেখা Lecture-04 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="bDAPJpfug94" data-nname="সরলরেখা Lecture-05" data-npdf="20250901-1725132597-A0xlfrRE.pdf">
-  সরলরেখা Lecture-05 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="ase9WRBvR3U" data-nname="সরলরেখা Lecture-06" data-npdf="20250903-1725310376-YuKZHvgt.pdf">
-  সরলরেখা Lecture-06 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="w445dSaUjts" data-nname="সরলরেখা Lecture-07" data-npdf="20250904-1725470806-o6JiE6X1.pdf">
-  সরলরেখা Lecture-07 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="q8YfPhSJbm8" data-nname="সরলরেখা Lecture-08" data-npdf="20250907-1725726771-R1o2uRie.pdf">
-  সরলরেখা Lecture-08 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="IgryrCnxT6A" data-nname="সরলরেখা Lecture-09" data-npdf="20250910-1725910387-3nirqIob.pdf">
-  সরলরেখা Lecture-09 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="lkNZcQmxBks" data-nname="সরলরেখা Lecture-10" data-npdf="20250912-1726086179-i5RJJif1.pdf">
-  সরলরেখা Lecture-10 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="7um792d6yNg" data-nname="সরলরেখা Lecture-11" data-npdf="20250915-1726343754-Nb55lpPg.pdf">
-  সরলরেখা Lecture-11 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="MMWGKNo5NsQ" data-nname="সরলরেখা Lecture-12" data-npdf="20250919-1726739546-pMfDheYO.pdf">
-  সরলরেখা Lecture-12 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="AowCYU7ELqk" data-nname="সরলরেখা Lecture-13" data-npdf="20250922-1726946330-6tG3CY8t.pdf">
-  সরলরেখা Lecture-13 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="gOmdejdZ_r4" data-nname="সরলরেখা Lecture-14" data-npdf="20250924-1727122179-Vk3NbP3u.pdf">
-  সরলরেখা Lecture-14 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="jXhE02TLzJc" data-nname="সরলরেখা Lecture-15" data-npdf="20250925-1727285865-kxD53nU5.pdf">
-  সরলরেখা Lecture-15 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="1aKRtC5avo0" data-nname="সরলরেখা Lecture-16" data-npdf="20250929-1727547719-0U0Uj619.pdf">
-  সরলরেখা Lecture-16 <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="vC_nu7aBsPo" data-nname="বৃত্ত - পর্ব ০১" data-npdf="20241003-1727892426-oAF2n66y.pdf">
-  বৃত্ত - পর্ব ০১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="tmqoSDer0_A" data-nname="বৃত্ত - পর্ব ০২" data-npdf="20241008-1728324955-seb0BFoO.pdf">
-  বৃত্ত - পর্ব ০২ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="fkZTAWt5oVY" data-nname="বৃত্ত - পর্ব ০৩" data-npdf="20241010-1728503474-vTq3l7p4.pdf">
-  বৃত্ত - পর্ব ০৩ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="NekC-bXHMXY" data-nname="বৃত্ত - পর্ব ০৪" data-npdf="20241015-1728967316-0n7vzF7p.pdf">
-  বৃত্ত - পর্ব ০৪ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="RxhCyAOqGWM" data-nname="বৃত্ত - পর্ব ০৫" data-npdf="20241016-1729086446-VPfOjLCL.pdf">
-  বৃত্ত - পর্ব ০৫ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="DUrma6I4dtI" data-nname=" বৃত্ত - পর্ব ০৬" data-npdf="20241020-1729363267-NqvEV4Hm.pdf">
-  বৃত্ত - পর্ব ০৬ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="CROC_RI_atI" data-nname="বৃত্ত - পর্ব ০৭" data-npdf="20241021-1729532779-wSWc45KK.pdf">
-  বৃত্ত - পর্ব ০৭ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="_m4a2CYuVno" data-nname="ত্রিকোণমিতি সূত্র" data-npdf="">
-  ত্রিকোণমিতি সূত্র
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="MW8xW_5sLkM" data-nname="ত্রিকোণমিতি - পর্ব ০১" data-npdf="20241105-1730748335-jDFASON4.pdf">
-  ত্রিকোণমিতি - পর্ব ০১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="rXUvqbvpFKE" data-nname="ত্রিকোণমিতি - পর্ব ০২" data-npdf="20241107-1730925357-JoP4d7MA.pdf">
-  ত্রিকোণমিতি - পর্ব ০২ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="LgnfCqZLsUE" data-nname="ত্রিকোণমিতি - পর্ব ০৩" data-npdf="20241112-1731353973-SmfGgVSE.pdf">
-  ত্রিকোণমিতি - পর্ব ০৩ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="1BvwfJcCFYI" data-nname="ত্রিকোণমিতি - পর্ব ০৪" data-npdf="20241115-1731619576-T6EgQjlk.pdf">
-  ত্রিকোণমিতি - পর্ব ০৪ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="kuR9YOGPXOc" data-nname="ত্রিকোণমিতি - পর্ব ০৫" data-npdf="20241116-1731772257-1JRZKR9F.pdf">
-  ত্রিকোণমিতি - পর্ব ০৫ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="nz853OgzXis" data-nname="ত্রিকোণমিতি - পর্ব ০৬" data-npdf="20241120-1732116971-64wITLEm.pdf">
-  ত্রিকোণমিতি - পর্ব ০৬ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="8WnIDLxdiVA" data-nname="ত্রিকোণমিতি - পর্ব ০৭" data-npdf="20241123-1732383725-W0bOr7kc.pdf">
-  ত্রিকোণমিতি - পর্ব ০৭ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="hlFYDJpxSW4" data-nname="ত্রিকোণমিতি - পর্ব ০৮" data-npdf="20241126-1732568676-be07Pykf.pdf">
-  ত্রিকোণমিতি - পর্ব ০৮ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="5AOn5LqY1z0" data-nname="ত্রিকোণমিতি - পর্ব ০৯" data-npdf="20241201-1733004093-MDDPOHIN.pdf">
-  ত্রিকোণমিতি - পর্ব ০৯ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="dyOQEk8QkDs" data-nname="ত্রিকোণমিতি - পর্ব ১০" data-npdf="20241205-1733350378-Cn46JrDy.pdf">
-  ত্রিকোণমিতি - পর্ব ১০ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="WU1rWRfuRDU" data-nname="ত্রিকোণমিতি - পর্ব ১১" data-npdf="20241211-1733860627-Dabjpa9H.pdf">
-  ত্রিকোণমিতি - পর্ব ১১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="wyWqUYkftBc" data-nname="ত্রিকোণমিতি - পর্ব ১২" data-npdf="20241212-1733947332-0fUo1PYz.pdf">
-  ত্রিকোণমিতি - পর্ব ১২ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="r7tKblwAGCc" data-nname="ত্রিকোণমিতি - পর্ব ১৩" data-npdf="20241215-1734209456-dZOPLcvr.pdf">
-  ত্রিকোণমিতি - পর্ব ১৩ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="cSWOtlpxwxE" data-nname="ত্রিকোণমিতি - পর্ব  ১৪" data-npdf="20241219-1734549107-6TLXCe8W.pdf">
-  ত্রিকোণমিতি - পর্ব  ১৪ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="CKPxAzWwaU0" data-nname="ত্রিকোণমিতি - পর্ব ১৫" data-npdf="20241224-1734985667-X15J2Vfu.pdf">
-  ত্রিকোণমিতি - পর্ব ১৫ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="zaGv1bDWmgg" data-nname="ত্রিকোণমিতি | সৃজনশীল | EndGame CQ Solving Series" data-npdf="20241225-1735124701-PjGUYSo5.pdf">
-  ত্রিকোণমিতি | সৃজনশীল | EndGame CQ Solving Series <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="dGOXGSHRhVQ" data-nname="ত্রিকোণমিতি  - পর্ব ১৬" data-npdf="20241229-1735416947-31g7Pre1.pdf">
-  ত্রিকোণমিতি  - পর্ব ১৬ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="Q50fglFIO08" data-nname="অ অন্তরীকরণ পর্ব  - ০১" data-npdf="20250105-1736018668-fzfdEMUP.pdf">
-  অ অন্তরীকরণ পর্ব  - ০১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="iuPiqzfqezA" data-nname="অ অন্তরীকরণ - পর্ব ০২" data-npdf="20250107-1736190063-rzlyQ8ws.pdf">
-  অ অন্তরীকরণ - পর্ব ০২ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="K2gswMSlGAs" data-nname="অ অন্তরীকরণ - পর্ব ৩.১" data-npdf="20250109-1736362963-OGYXeHgK.pdf">
-  অ অন্তরীকরণ - পর্ব ৩.১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="mWKr3qQeeZQ" data-nname="অ অন্তরীকরণ - পর্ব ৩.২" data-npdf="20250109-1736362963-OGYXeHgK.pdf">
-  অ অন্তরীকরণ - পর্ব ৩.২ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="Ubi5W-641Fg" data-nname="অ অন্তরীকরণ - পর্ব ০৪" data-npdf="20250112-1736620341-KIrXmjmF.pdf">
-  অ অন্তরীকরণ - পর্ব ০৪ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="SRbknXfQNq4" data-nname="অ অন্তরীকরণ - পর্ব ০৫" data-npdf="20250116-1736966630-aQWYWPDq.pdf">
-  অ অন্তরীকরণ - পর্ব ০৫ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="Wx9JLzOsPbs" data-nname="অ অন্তরীকরণ - পর্ব ০৬" data-npdf="20250119-1737227519-tyPBdw0t.pdf">
-  অ অন্তরীকরণ - পর্ব ০৬ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="h3O_HKfaS6g" data-nname="অ অন্তরীকরণ - পর্ব ০৭" data-npdf="20250121-1737406393-Q6Jhxoag.pdf">
-  অ অন্তরীকরণ - পর্ব ০৭ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="apClGBML860" data-nname="অ অন্তরীকরণ - পর্ব ০৮" data-npdf="20250122-1737563379-SUj5gZpu.pdf">
-  অ অন্তরীকরণ - পর্ব ০৮ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="K_vMZBVDpPA" data-nname="অ অন্তরীকরন - পর্ব ০৯" data-npdf="20250129-1738091373-YYN1WXHR.pdf">
-  অ অন্তরীকরন - পর্ব ০৯ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="nOy4RDAsSUs" data-nname="অ অন্তরীকরন - পর্ব ১০" data-npdf="20250129-1738170575-MNVwpD7m.pdf">
-  অ অন্তরীকরন - পর্ব ১০ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="kU92DY0a12Q" data-nname="অ অন্তরীকরন - পর্ব ১১" data-npdf="20250131-1738264795-1NsQNXFy.pdf">
-  অ অন্তরীকরন - পর্ব ১১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="AfLdrDLhQQs" data-nname="যোগজীকরণ - পর্ব ০১" data-npdf="20250211-1739217925-5warnilX.pdf">
-  যোগজীকরণ - পর্ব ০১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="qrzDmWDTy9g" data-nname="যোগজীকরণ - পর্ব ০২" data-npdf="20250218-1739821698-vc5xjN2n.pdf">
-  যোগজীকরণ - পর্ব ০২ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="pUn0IXkxO3Y" data-nname="যোগজীকরণ - পর্ব ০৩" data-npdf="20250220-1739992579-Nb6C4GoX.pdf">
-  যোগজীকরণ - পর্ব ০৩ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="JncQOzGjeBI" data-nname="যোগজীকরণ - পর্ব ০৪" data-npdf="20250223-1740247740-aFxsUVuC.pdf">
-  যোগজীকরণ - পর্ব ০৪ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="9EEguTE7lNE" data-nname="যোগজীকরণ - পর্ব ০৫" data-npdf="20250227-1740658879-wMVBkkxR.pdf">
-  যোগজীকরণ - পর্ব ০৫ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="vaTcPeQjQaM" data-nname="যোগজীকরণ - পর্ব ০৬" data-npdf="20240304-1741101414-ZJCvLwrQ.pdf">
-  যোগজীকরণ - পর্ব ০৬ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="Sh6IBU4KySI" data-nname="যোগজীকরণ - পর্ব ০৭" data-npdf="20240308-1741456359-81zjr1PY.pdf">
-  যোগজীকরণ - পর্ব ০৭ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="3nOWrTPZO_8" data-nname="যোগজীকরণ - পর্ব  ০ আট" data-npdf="20240315-1742047395-gUXKrQRs.pdf">
-  যোগজীকরণ - পর্ব  ০ আট <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="whqBquJ6Nsk" data-nname="যোগজীকরণ - পর্ব ০৯" data-npdf="20240417-1744893010-cn8stI0S.pdf">
-  যোগজীকরণ - পর্ব ০৯ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="-FlXDm04HFk" data-nname="যোগজীকরণ - পর্ব ১০" data-npdf="20240322-1742645970-u1WvxylW.pdf">
-  যোগজীকরণ - পর্ব ১০ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="CfBXIbgL8t4" data-nname="যোগজীকরণ - পর্ব  ১১" data-npdf="20240417-1744892819-AeCcdnl0.pdf">
-  যোগজীকরণ - পর্ব  ১১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="0nFYv7cIQ_Y" data-nname="যোগজীকরণ - MCQ Solving" data-npdf="20240422-1745272821-oidKO6le.pdf">
-  যোগজীকরণ - MCQ Solving <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="4GpRS_wInwk" data-nname="যোগজীকরণ - CQ Solving" data-npdf="20240427-1745747518-LwmpPRob.pdf">
-  যোগজীকরণ - CQ Solving <i class="fas fa-file-pdf text-red-500 ml-2"></i>
-</li>
-<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="Y5YVtnaXAFE" data-nname="বিন্যাস ও সমাবেশ - পর্ব ০১" data-npdf="20240501-1746044627-mGPh09i8.pdf">
-  বিন্যাস ও সমাবেশ - পর্ব ০১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
+<li class="class-item p-2 rounded hover:bg-blue-100 cursor-pointer" data-vid="HqF4pBphbKM" data-nname="সমানুতা - পর্ব ০১" data-npdf="20250620-1750424001-AZt5hROq.pdf">
+  সমানুতা - পর্ব ০১ <i class="fas fa-file-pdf text-red-500 ml-2"></i>
 </li>
       </ul>
     </div>
@@ -519,7 +359,7 @@
       <ul class="space-y-2 text-cyan-300 text-sm">
   <li>পড়ায় ঝড় তুলো!</li>
   <li>রঙিন নোট ফাটাও!</li>
-  <li> বই  পড়ো!</li>
+  <li> বই পড়ো!</li>
       </ul>
     </div>
 
@@ -672,7 +512,7 @@
             lastItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
         }
-      }, 2000);
+      }, 3500);
     });
 
 const downloadEmojiBtn = document.getElementById('downloadEmojiBtn');
